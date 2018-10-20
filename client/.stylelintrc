@@ -1,0 +1,33 @@
+{
+  "extends": "stylelint-config-standard",
+  "defaultSeverity": "error",
+  "plugins": [
+    "stylelint-scss"
+  ],
+  "rules": {
+    "no-descending-specificity": null,
+    "color-hex-length": "long",
+    "no-empty-source": null,
+    "at-rule-no-unknown": [ true, {
+      ignoreAtRules: [
+        'extend',
+        'mixin',
+        'if',
+        'content',
+        'else',
+        'error',
+        'include',
+        'function',
+        'return',
+        'each',
+        'for',
+        ]
+    }],
+    "at-rule-empty-line-before": [ "never", {
+      ignore: [
+        'after-comment',
+        'first-nested',
+        ]
+    }],
+  }
+}

@@ -1,0 +1,6 @@
+dist/
+webpack.config.js
+webpack.staging.config.js
+webpack.production.config.js
+lib/
+index.ejs
