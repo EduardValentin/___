@@ -1,13 +1,13 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const Sequelize = require("sequelize");
-exports.default = (sequelize) => {
-    const attributes = {
+exports.__esModule = true;
+var Sequelize = require("sequelize");
+exports["default"] = (function (sequelize) {
+    var attributes = {
         id: { type: Sequelize.INTEGER, primaryKey: true },
-        name: { type: Sequelize.STRING },
+        name: { type: Sequelize.STRING }
     };
-    const Role = sequelize.define("Role", attributes);
-    Role.associate = (models) => {
+    var Role = sequelize.define("Role", attributes);
+    Role.associate = function (models) {
         Role.belongsToMany(models.User, {
             through: 'UserRole',
             foreignKey: 'role_id',
@@ -15,5 +15,5 @@ exports.default = (sequelize) => {
         });
     };
     return Role;
-};
+});
 //# sourceMappingURL=Role.js.map

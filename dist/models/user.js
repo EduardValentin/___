@@ -1,8 +1,8 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const Sequelize = require("sequelize");
-exports.default = (sequelize) => {
-    const attributes = {
+exports.__esModule = true;
+var Sequelize = require("sequelize");
+exports["default"] = (function (sequelize) {
+    var attributes = {
         firstName: { type: Sequelize.STRING, allowNull: false },
         lastName: { type: Sequelize.STRING, allowNull: false },
         // @ts-ignore
@@ -10,7 +10,7 @@ exports.default = (sequelize) => {
             type: Sequelize.STRING,
             allowNull: false,
             unique: {
-                msg: 'Email address already exists',
+                msg: 'Email address already exists'
             },
             validate: {
                 isEmail: {
@@ -20,10 +20,10 @@ exports.default = (sequelize) => {
         },
         // @ts-ignore
         username: { type: Sequelize.STRING, allowNull: false, unique: { msg: 'Username already exists' } },
-        password: { type: Sequelize.STRING, allowNull: false },
+        password: { type: Sequelize.STRING, allowNull: false }
     };
-    const User = sequelize.define("User", attributes);
-    User.associate = (models) => {
+    var User = sequelize.define("User", attributes);
+    User.associate = function (models) {
         User.belongsToMany(models.Role, {
             through: 'UserRole',
             foreignKey: 'user_id',
@@ -31,5 +31,5 @@ exports.default = (sequelize) => {
         });
     };
     return User;
-};
+});
 //# sourceMappingURL=User.js.map

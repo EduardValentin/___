@@ -7,75 +7,146 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-const index_1 = require("../models/index");
-const BCrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-exports.register = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
-    try {
-        const hash = yield BCrypt.hash(req.body.password, 10);
-        const user = yield index_1.default.User.create({
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
-            username: req.body.username,
-            password: hash,
-            email: req.body.email,
-        });
-        // Resource created
-        console.log('Created user:', user);
-        res.status(201).send({
-            user,
-        });
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
-    catch (error) {
-        console.log(error);
-        res.status(500).send({
-            error,
-        });
-    }
-    ;
-});
-exports.index = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
-    const users = yield index_1.default.User.findAll();
-    res.status(200).send({
-        data: users,
-    });
-});
-exports.login = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
-    const { username: reqUsername, password: reqPassword } = req.body;
-    const user = yield index_1.default.User.findOne({
-        where: {
-            username: reqUsername,
+};
+var _this = this;
+exports.__esModule = true;
+var index_1 = require("../models/index");
+var BCrypt = require("bcrypt");
+var jwt = require("jsonwebtoken");
+exports.register = function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+    var hash, user, error_1;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 3, , 4]);
+                return [4 /*yield*/, BCrypt.hash(req.body.password, 10)];
+            case 1:
+                hash = _a.sent();
+                return [4 /*yield*/, index_1["default"].User.create({
+                        firstName: req.body.firstName,
+                        lastName: req.body.lastName,
+                        username: req.body.username,
+                        password: hash,
+                        email: req.body.email
+                    })
+                    // Resource created
+                ];
+            case 2:
+                user = _a.sent();
+                // Resource created
+                console.log('Created user:', user);
+                res.status(201).send({
+                    user: user
+                });
+                return [3 /*break*/, 4];
+            case 3:
+                error_1 = _a.sent();
+                console.log(error_1);
+                res.status(500).send({
+                    error: error_1
+                });
+                return [3 /*break*/, 4];
+            case 4:
+                ;
+                return [2 /*return*/];
         }
     });
-    if (!user) {
-        res.status(404).send({
-            error: 'Username or password didn\'t match, please verify and try again',
-        });
-    }
-    const passwordsMatch = yield BCrypt.compare(reqPassword, user.password);
-    if (!passwordsMatch) {
-        res.status(404).send({
-            error: 'Username or password didn\'t match, please verify and try again',
-        });
-    }
-    const token = jwt.sign({
-        username: reqUsername,
-    }, process.env.JWT_SECRET);
-    res.status(200).send({
-        token
-    });
-});
-exports.deleteUser = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
-    const { user_id } = req.body;
-    const deletedRowsCount = yield index_1.default.User.destroy({
-        where: {
-            user_id,
+}); };
+exports.index = function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+    var users;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, index_1["default"].User.findAll()];
+            case 1:
+                users = _a.sent();
+                res.status(200).send({
+                    data: users
+                });
+                return [2 /*return*/];
         }
     });
-    if (!deletedRowsCount) {
-        res.status(404).send({ error: 'User not found' });
-    }
-    res.status(204).send({ error: 'User deleted succesfuly' });
-});
+}); };
+exports.login = function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+    var _a, reqUsername, reqPassword, user, passwordsMatch, token;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                _a = req.body, reqUsername = _a.username, reqPassword = _a.password;
+                return [4 /*yield*/, index_1["default"].User.findOne({
+                        where: {
+                            username: reqUsername
+                        }
+                    })];
+            case 1:
+                user = _b.sent();
+                if (!user) {
+                    res.status(404).send({
+                        error: 'Username or password didn\'t match, please verify and try again'
+                    });
+                }
+                return [4 /*yield*/, BCrypt.compare(reqPassword, user.password)];
+            case 2:
+                passwordsMatch = _b.sent();
+                if (!passwordsMatch) {
+                    res.status(404).send({
+                        error: 'Username or password didn\'t match, please verify and try again'
+                    });
+                }
+                token = jwt.sign({
+                    username: reqUsername
+                }, process.env.JWT_SECRET);
+                res.status(200).send({
+                    token: token
+                });
+                return [2 /*return*/];
+        }
+    });
+}); };
+exports.deleteUser = function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+    var user_id, deletedRowsCount;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                user_id = req.body.user_id;
+                return [4 /*yield*/, index_1["default"].User.destroy({
+                        where: {
+                            user_id: user_id
+                        }
+                    })];
+            case 1:
+                deletedRowsCount = _a.sent();
+                if (!deletedRowsCount) {
+                    res.status(404).send({ error: 'User not found' });
+                }
+                res.status(204).send({ error: 'User deleted succesfuly' });
+                return [2 /*return*/];
+        }
+    });
+}); };
 //# sourceMappingURL=User.js.map

@@ -1,7 +1,7 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = {
-    up: (queryInterface, DataTypes) => {
+exports.__esModule = true;
+exports["default"] = {
+    up: function (queryInterface, DataTypes) {
         return Promise.all([
             // -- Articles
             queryInterface.addColumn('Articles', 'user_id', {
@@ -9,7 +9,7 @@ exports.default = {
                 type: DataTypes.INTEGER,
                 references: {
                     model: 'Users',
-                    key: 'id',
+                    key: 'id'
                 }
             }),
             queryInterface.addColumn('Articles', 'text_id', {
@@ -17,7 +17,7 @@ exports.default = {
                 type: DataTypes.INTEGER,
                 references: {
                     model: 'Texts',
-                    key: 'id',
+                    key: 'id'
                 }
             }),
             queryInterface.addColumn('Comments', 'parent_id', {
@@ -25,7 +25,7 @@ exports.default = {
                 type: DataTypes.INTEGER,
                 references: {
                     model: 'Comments',
-                    key: 'id',
+                    key: 'id'
                 }
             }),
             // -- Comments
@@ -34,7 +34,7 @@ exports.default = {
                 type: DataTypes.INTEGER,
                 references: {
                     model: 'Users',
-                    key: 'id',
+                    key: 'id'
                 }
             }),
             queryInterface.addColumn('Comments', 'article_id', {
@@ -42,7 +42,7 @@ exports.default = {
                 type: DataTypes.INTEGER,
                 references: {
                     model: 'Articles',
-                    key: 'id',
+                    key: 'id'
                 }
             }),
             // -- MediaFiles
@@ -51,7 +51,7 @@ exports.default = {
                 type: DataTypes.INTEGER,
                 references: {
                     model: 'Users',
-                    key: 'id',
+                    key: 'id'
                 }
             }),
             queryInterface.addColumn('MediaFiles', 'media_group_id', {
@@ -59,12 +59,12 @@ exports.default = {
                 type: DataTypes.INTEGER,
                 references: {
                     model: 'MediaGroups',
-                    key: 'id',
+                    key: 'id'
                 }
             }),
         ]);
     },
-    down: (queryInterface, DataTypes) => {
+    down: function (queryInterface, DataTypes) {
         Promise.all([
             queryInterface.removeColumn('Articles', 'user_id'),
             queryInterface.removeColumn('Articles', 'text_id'),

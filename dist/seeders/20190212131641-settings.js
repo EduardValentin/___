@@ -1,7 +1,7 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = {
-    up: (queryInterface, DataTypes) => {
+exports.__esModule = true;
+exports["default"] = {
+    up: function (queryInterface, DataTypes) {
         /*
           Add altering commands here.
           Return a promise to correctly handle asynchronicity.
@@ -15,9 +15,11 @@ exports.default = {
         return queryInterface.bulkInsert('Settings', [{
                 setting_name: 'Template',
                 setting_value: 'BlankTemplate',
+                createdAt: new Date(),
+                updatedAt: new Date()
             }], {});
     },
-    down: (queryInterface, DataTypes) => {
+    down: function (queryInterface, DataTypes) {
         /*
           Add reverting commands here.
           Return a promise to correctly handle asynchronicity.

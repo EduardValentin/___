@@ -1,17 +1,17 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const Sequelize = require("sequelize");
-exports.default = (sequelize) => {
-    const attributes = {
+exports.__esModule = true;
+var Sequelize = require("sequelize");
+exports["default"] = (function (sequelize) {
+    var attributes = {
         id: { type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true },
         label: { type: Sequelize.STRING, allowNull: false },
-        link: { type: Sequelize.STRING, allowNull: false, unique: true },
+        link: { type: Sequelize.STRING, allowNull: false, unique: true }
     };
-    const Page = sequelize.define('Page', attributes);
-    Page.associate = (models) => {
+    var Page = sequelize.define('Page', attributes);
+    Page.associate = function (models) {
         Page.belongsTo(models.User, {
             foreignKey: 'user_id',
-            targetKey: 'id',
+            targetKey: 'id'
         });
         Page.belongsToMany(models.Article, {
             through: 'PagesTemplates',
@@ -20,5 +20,5 @@ exports.default = (sequelize) => {
         });
     };
     return Page;
-};
+});
 //# sourceMappingURL=Page.js.map

@@ -1,18 +1,18 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const Sequelize = require("sequelize");
-exports.default = (sequelize) => {
-    const attributes = {
+exports.__esModule = true;
+var Sequelize = require("sequelize");
+exports["default"] = (function (sequelize) {
+    var attributes = {
         path: { type: Sequelize.STRING },
-        type: { type: Sequelize.STRING },
+        type: { type: Sequelize.STRING }
     };
-    const MediaFile = sequelize.define("MediaFile", attributes);
-    MediaFile.associate = (models) => {
+    var MediaFile = sequelize.define("MediaFile", attributes);
+    MediaFile.associate = function (models) {
         MediaFile.belongsTo(models.User, {
             foreignKey: 'user_id',
-            targetKey: 'id',
+            targetKey: 'id'
         });
     };
     return MediaFile;
-};
+});
 //# sourceMappingURL=MediaFile.js.map
