@@ -1,7 +1,7 @@
 const merge  = require('webpack-merge');
-const common = require('./webpack.common.js');
 const webpack           = require('webpack');
 const StyleLintPlugin     = require('stylelint-webpack-plugin');
+const common = require('./webpack.common.js');
 
 module.exports = merge(common, {
   mode: 'development',

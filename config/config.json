@@ -18,6 +18,6 @@
     "password": "root",
     "database": "reactive_cms_production",
     "host": "127.0.0.1",
-    "dialect": "postgres"
+    "dialect": "postgres" 
   }
 }
