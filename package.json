@@ -1,0 +1,48 @@
+{
+  "name": "reactive-cms",
+  "version": "1.0.0",
+  "description": "A restful api content management system",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "test",
+    "compile": "tsc && node dist/index.js",
+    "build-client": "cd client && yarn build && cd ..",
+    "dev": "nodemon -e ts  --exec \"npm run compile\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EduardValentin/___.git"
+  },
+  "author": "Trocan Eduard Valentin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/EduardValentin/___/issues"
+  },
+  "homepage": "https://github.com/EduardValentin/___#readme",
+  "dependencies": {
+    "@types/dotenv": "^4.0.3",
+    "@types/express": "^4.16.0",
+    "@types/node": "^10.11.7",
+    "@types/pg": "^7.4.11",
+    "bcrypt": "^3.0.2",
+    "dotenv": "^6.1.0",
+    "eslint-plugin-react": "^7.11.1",
+    "express": "^4.16.4",
+    "jsonwebtoken": "^8.3.0",
+    "nodemon": "^1.18.4",
+    "pg": "^7.5.0",
+    "sequelize-cli-typescript": "^3.2.0-c",
+    "typescript": "^3.1.3",
+    "typescript-eslint-parser": "^19.0.2",
+    "uuid": "^3.3.2"
+  },
+  "devDependencies": {
+    "@types/ramda": "^0.25.39",
+    "@types/sequelize": "^4.27.28",
+    "bcryptjs": "^2.4.3",
+    "eslint": "^5.7.0",
+    "eslint-config-google": "^0.10.0",
+    "ramda": "^0.25.0",
+    "sequelize": "^4.39.0"
+  }
+}
