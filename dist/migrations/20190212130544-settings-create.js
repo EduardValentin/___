@@ -8,6 +8,8 @@ exports.default = {
             id: { type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true },
             setting_name: { type: Sequelize.STRING, allowNull: false, },
             setting_value: { type: Sequelize.STRING, allowNull: false, },
+            createdAt: { type: Sequelize.DATE },
+            updatedAt: { type: Sequelize.DATE },
         });
     },
     down: (queryInterface, DataTypes) => {

@@ -5,11 +5,12 @@
       "outDir": "dist",
       "sourceMap": true
     },
-    "include": [
-      "./**/*.ts"
-    ],
+    // "include": [
+    //   "./**/*.ts", "client/src/ducks/app/app.tsx", "client/src/ducks/app/types.tsx"
+    // ],
     "lib": ["es6"],
     "exclude": [
-      "node_modules"
+      "node_modules",
+      "./client"
     ]
   }

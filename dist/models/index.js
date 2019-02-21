@@ -18,6 +18,7 @@ let db = {
     Sequelize,
     User: null,
     Role: null,
+    Settings: null,
 };
 fs
     .readdirSync(__dirname)

@@ -74,6 +74,6 @@ export const deleteUser = async (req: Request, res: Response, next: NextFunction
   if(!deletedRowsCount) {
     res.status(404).send({error: 'User not found'});
   }
-  res.status(204).send({error: 'User deleted succesfuly'});
+  res.status(204).send();
 
 };

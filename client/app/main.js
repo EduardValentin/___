@@ -13,9 +13,9 @@ import Main from 'components/Main';
 // Import main css file.
 import './style.js';
 
-const config = require('config.json');
+// const config = require('config.json');
 
-import(`templates/${config['template-name']}/style.js`);
+// import(`templates/${config['template-name']}/style.js`);
 
 
 ReactDOM.render(

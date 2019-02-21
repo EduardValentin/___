@@ -76,6 +76,6 @@ exports.deleteUser = (req, res, next) => __awaiter(this, void 0, void 0, functio
     if (!deletedRowsCount) {
         res.status(404).send({ error: 'User not found' });
     }
-    res.status(204).send({ error: 'User deleted succesfuly' });
+    res.status(204).send();
 });
-//# sourceMappingURL=User.js.map
+//# sourceMappingURL=user_controller.js.map

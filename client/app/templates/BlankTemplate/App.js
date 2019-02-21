@@ -8,7 +8,7 @@ class App extends React.Component {
 
   render() {
     return (
-      <div>Content from template</div>
+      <div>Content from Blank template</div>
     );
   }
 }

@@ -13,7 +13,7 @@ const config = {
       beforeEmit: true,
     }),
     new HtmlWebpackPlugin({
-      title: 'React KIT',
+      title: 'Your App',
       template: 'index.ejs',
     }),
   ],

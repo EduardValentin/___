@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { isApplicationMaintainerLogged } from 'session';
+import { Redirect } from 'react-router-dom';
 
 class Admin extends Component {
   constructor(props) {
@@ -7,6 +9,10 @@ class Admin extends Component {
   }
 
   render() {
+    if (!isApplicationMaintainerLogged()) {
+      return <Redirect to="/admin/login" />;
+    }
+
     return (
       <div>
         {'Admin'}

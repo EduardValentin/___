@@ -1,5 +1,6 @@
 import { createAction } from 'redux-actions';
 import Immutable from 'seamless-immutable';
+import * as Settings from 'api/settings';
 
 export default function reducer(state = Immutable({}), action) {
   switch (action.type)  {
@@ -15,6 +16,8 @@ export default function reducer(state = Immutable({}), action) {
       return state.set('user', action.payload);
     case 'app/LOGOUT':
       return state.set('user', {});
+    case 'app/SET_DEFAULT_TEMPLATE':
+      return state.set('template', action.payload);
     default:
       return state;
   }
@@ -26,3 +29,18 @@ export const appError           = createAction('app/APP_ERROR');
 
 export const loginUser          = createAction('app/LOGIN');
 export const logout             = createAction('app/LOGOUT');
+
+export const setDefaultTemplate = createAction('app/SET_DEFAULT_TEMPLATE');
+
+export const fetchDefaultTemplate = () => dispatch => {
+  // dispatch(appLoading());
+  return Settings.getTemplate()
+    .then((response) => {
+      // dispatch(appLoaded());
+      dispatch(setDefaultTemplate(response.body));
+    })
+    .catch((error) => {
+      console.error(error);
+      // dispatch(appLoaded());
+    });
+};

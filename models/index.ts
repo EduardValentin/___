@@ -23,6 +23,7 @@ let db : DatabasebInterface = {
 	Sequelize,
 	User: null,
 	Role: null,
+	Settings: null,
 };
 
 fs

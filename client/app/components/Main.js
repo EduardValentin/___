@@ -11,9 +11,10 @@ import ApplicationContainer from 'components/ApplicationContainer';
 
 class Main extends Component {
   renderApp() {
+    const { template } = this.props;
     return (
       <HashRouter>
-        <Route component={ApplicationContainer} />
+        <Route render={(props) => <ApplicationContainer {...props} template={template} />} />
       </HashRouter>
     );
   }
