@@ -10,7 +10,7 @@ const env = process.env.NODE_ENV || 'development';
 const config = require(__dirname + '/../../config/config.json')[env];
 
 
-let sequelize : Sequelize.Sequelize;
+let sequelize: Sequelize.Sequelize;
 
 if (config.use_env_variable) {
 	sequelize = new Sequelize(process.env[config.use_env_variable], config);
@@ -18,12 +18,14 @@ if (config.use_env_variable) {
 	sequelize = new Sequelize(config.database, config.username, config.password, config);
 }
 
-let db : DatabasebInterface = {
+let db: DatabasebInterface = {
 	sequelize,
 	Sequelize,
 	User: null,
 	Role: null,
 	Settings: null,
+	Entity: null,
+	UIControl: null,
 };
 
 fs
@@ -33,8 +35,8 @@ fs
 	})
 	.forEach(file => {
 
-		const model:any = sequelize.import(path.join(__dirname, file));
-		if(model) {
+		const model: any = sequelize.import(path.join(__dirname, file));
+		if (model) {
 			db[model.name] = model;
 		}
 	});

@@ -1,0 +1,15 @@
+.admin {
+  min-height: 100vh;
+
+  .content {
+    &.expanded {
+      margin-left: 15rem;
+      transition: margin-left .3s ease;
+    }
+
+    &.collapsed {
+      margin-left: 2.5rem;
+      transition: margin-left .3s ease;
+    }
+  }
+}

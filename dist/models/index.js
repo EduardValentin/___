@@ -19,6 +19,8 @@ let db = {
     User: null,
     Role: null,
     Settings: null,
+    Entity: null,
+    UIControl: null,
 };
 fs
     .readdirSync(__dirname)

@@ -8,9 +8,9 @@ import {
   identity,
 } from 'ramda';
 
-export const getSession = () => {};
+export const getSession = () => { };
 
-export const isApplicationMaintainerLogged = () => {
+export const getUserToken = () => {
   const session = sessionStorage.getItem('maintainer-token');
   const cookie = _getMaintainerTokenCookie();
   return cookie || session;

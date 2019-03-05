@@ -1,4 +1,5 @@
 import React from 'react';
+import './styles/index.scss';
 
 class App extends React.Component {
   constructor(props) {

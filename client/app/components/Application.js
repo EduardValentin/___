@@ -1,8 +1,8 @@
 import { Route, Switch } from 'react-router-dom';
 import React, { Component, Fragment } from 'react';
 import { equals } from 'ramda';
-import AdminContainer from 'components/admin/AdminContainer';
-import LoginForm from 'components/admin/auth/LoginForm';
+import LoadingSpinner from 'lib/components/LoadingSpinner';
+import AdminContainer from './admin/AdminContainer';
 
 class Application extends Component {
   constructor(props) {
@@ -14,7 +14,9 @@ class Application extends Component {
   }
 
   async componentDidMount() {
-    const { actions: { fetchDefaultTemplate } } = this.props;
+    const {
+      actions: { fetchDefaultTemplate },
+    } = this.props;
     fetchDefaultTemplate();
   }
 
@@ -23,11 +25,7 @@ class Application extends Component {
       location,
       error,
       actions: { setAppError },
-      template: {
-        data: {
-          setting_value,
-        },
-      },
+      template,
     } = this.props;
     /**
      * one should check if route changed while application has errors
@@ -39,13 +37,14 @@ class Application extends Component {
 
     const { TemplateComponent } = this.state;
     // Should update state only if template name changed or if it fetched
-    if (!TemplateComponent || prevProps.template.data.setting_value !== setting_value) {
-      const template = await import(`templates/${setting_value}/App.js`);
+    if (!template.loading && (
+      !TemplateComponent || prevProps.template.data.setting_value !== template.data.setting_value)) {
+      const importedTemplate = await import(`templates/${template.data.setting_value}/App.js`);
       // eslint-disable-next-line react/no-did-update-set-state
-      this.setState({ TemplateComponent: template.default });
+      this.setState({ TemplateComponent: importedTemplate.default });
 
-      // Import the css file for the selected template
-      import(`templates/${setting_value}/style.js`);
+      // // Import the css file for the selected template
+      // import(`templates/${setting_value}/style.js`);
     }
   }
 
@@ -60,17 +59,17 @@ class Application extends Component {
 
   render() {
     const { TemplateComponent } = this.state;
+    const { template } = this.props;
 
-    if (!TemplateComponent) {
-      return null;
+    if (!TemplateComponent || template.loading) {
+      return <LoadingSpinner />;
     }
 
     return (
       <Fragment>
         <Switch>
           <Route exact path="/" component={TemplateComponent} />
-          <Route exact path="/admin" component={AdminContainer} />
-          <Route exact path="/admin/login" component={LoginForm} />
+          <Route path="/admin" component={AdminContainer} />
         </Switch>
       </Fragment>
     );

@@ -13,10 +13,16 @@ import Immutable from 'seamless-immutable';
 import { reducer as form } from 'redux-form';
 
 import app from 'ducks/app';
+import entities from 'ducks/entities';
+
 
 const initialState = Immutable({
   app: {
     appLoading: false,
+  },
+  entities: {
+    data: null,
+    loading: false,
   },
 });
 
@@ -49,6 +55,7 @@ const crashReporter = store => next => (action) => {
 
 const reducer = combineReducers(Object.assign({}, {
   app,
+  entities,
   form,
 }));
 

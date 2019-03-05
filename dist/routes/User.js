@@ -8,5 +8,6 @@ router.get('/', verify_token_1.default, user_controller_1.index);
 router.post('/register', user_controller_1.register);
 router.post('/login', user_controller_1.login);
 router.delete('/delete', verify_token_1.default, user_controller_1.deleteUser);
+router.get('/current', verify_token_1.default, user_controller_1.getCurrentUser);
 exports.default = router;
 //# sourceMappingURL=user.js.map

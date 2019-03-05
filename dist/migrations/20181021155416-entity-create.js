@@ -5,8 +5,7 @@ exports.default = {
     up: (queryInterface, DataTypes) => {
         queryInterface.createTable('Entities', {
             id: { type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true },
-            name: { type: Sequelize.STRING },
-            route: { type: Sequelize.STRING },
+            name: { type: Sequelize.STRING, allowNull: false, unique: true, },
             createdAt: { type: Sequelize.DATE, allowNull: false },
             updatedAt: { type: Sequelize.DATE, allowNull: false },
         });

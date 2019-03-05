@@ -11,6 +11,20 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const index_1 = require("../models/index");
 const BCrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+exports.getCurrentUser = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+    const AUTH = req.headers.authorization;
+    try {
+        const decodedUser = jwt.verify(AUTH, process.env.JWT_SECRET);
+        res.status(200).send({
+            data: decodedUser,
+        });
+    }
+    catch (error) {
+        res.status(500).send({
+            error,
+        });
+    }
+});
 exports.register = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
     try {
         const hash = yield BCrypt.hash(req.body.password, 10);
@@ -60,10 +74,13 @@ exports.login = (req, res, next) => __awaiter(this, void 0, void 0, function* ()
         });
     }
     const token = jwt.sign({
-        username: reqUsername,
+        user,
     }, process.env.JWT_SECRET);
     res.status(200).send({
-        token
+        data: {
+            user,
+            token,
+        }
     });
 });
 exports.deleteUser = (req, res, next) => __awaiter(this, void 0, void 0, function* () {

@@ -29,7 +29,7 @@ export default {
           key: 'id',
         }
       }),
-      
+
       // -- Comments
       queryInterface.addColumn('Comments', 'user_id', {
         // Comment belongs to User
@@ -39,7 +39,7 @@ export default {
           key: 'id',
         }
       }),
-      
+
       queryInterface.addColumn('Comments', 'article_id', {
         // Comment belongs to Article
         type: DataTypes.INTEGER,
@@ -59,13 +59,32 @@ export default {
         }
       }),
 
+      // MediaGroup has many MediaFiles
       queryInterface.addColumn('MediaFiles', 'media_group_id', {
-        // MediaGroup has many MediaFiles
         type: DataTypes.INTEGER,
         references: {
           model: 'MediaGroups',
           key: 'id',
         }
+      }),
+
+      // Entitiy has many UIControls
+      queryInterface.addColumn('UIControls', 'entity_id', {
+        type: DataTypes.INTEGER,
+        references: {
+          model: 'Entities',
+          key: 'id',
+        },
+      }),
+
+      // User has many entities
+      queryInterface.addColumn('Entities', 'user_id', {
+        type: DataTypes.INTEGER,
+        defaultValue: null,
+        references: {
+          model: 'Users',
+          key: 'id',
+        },
       }),
     ]);
   },
@@ -79,7 +98,8 @@ export default {
       queryInterface.removeColumn('Comments', 'article_id'),
       queryInterface.removeColumn('MediaFiles', 'user_id'),
       queryInterface.removeColumn('MediaFiles', 'media_group_id'),
-
+      queryInterface.removeColumn('UIControls', 'entity_id'),
+      queryInterface.removeColumn('Entities', 'user_id'),
     ]);
   }
 }

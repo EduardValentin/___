@@ -1,6 +1,6 @@
-const merge  = require('webpack-merge');
-const webpack           = require('webpack');
-const StyleLintPlugin     = require('stylelint-webpack-plugin');
+const merge = require('webpack-merge');
+const webpack = require('webpack');
+// const StyleLintPlugin     = require('stylelint-webpack-plugin');
 const common = require('./webpack.common.js');
 
 module.exports = merge(common, {
@@ -24,9 +24,9 @@ module.exports = merge(common, {
   },
   devtool: 'eval-source-map',
   plugins: [
-    new StyleLintPlugin({
-      configFile: '.stylelintrc',
-    }),
+    // new StyleLintPlugin({
+    //   configFile: '.stylelintrc',
+    // }),
     new webpack.DefinePlugin({
       __BASE_URL__: JSON.stringify('http://localhost:3000'),
       __ENV__: JSON.stringify('dev'),

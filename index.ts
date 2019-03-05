@@ -1,4 +1,5 @@
 import app from './App';
+import DatabasePool from './DatabasePool';
 
 require('dotenv').config();
 
@@ -9,4 +10,12 @@ app.listen(port, (err) => {
     return console.log(err)
   }
   return console.log(`server is listening on ${port}`)
-})
+});
+
+process.on('SIGTERM', () => {
+  DatabasePool.getInstance().endPool();
+});
+
+process.on('SIGKILL', () => {
+  DatabasePool.getInstance().endPool();
+});

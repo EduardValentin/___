@@ -1,12 +1,18 @@
 import { connect } from 'react-redux';
-import Admin from './Admin.js';
+import { pathOr } from 'ramda';
+import { fetchUserDetails } from 'ducks/app';
+import Admin from './Admin';
 
-function mapDispatchToProps() {
-  return {};
+function mapStateToProps(state) {
+  return {
+    user: pathOr(null, ['app', 'user'], state),
+  };
 }
 
-function mapStateToProps() {
-  return {};
+function mapDispatchToProps(dispatch) {
+  return {
+    fetchUserDetails: () => dispatch(fetchUserDetails()),
+  };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Admin);

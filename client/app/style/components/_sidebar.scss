@@ -1,0 +1,37 @@
+.sidebar {
+  @extend .bg-black;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 15rem;
+  position: fixed;
+  transition: left .3s ease;
+  
+  .toggler {
+    font-size: 1.5rem;
+  }
+
+  a {
+    transition: all .1s ease;
+    color: $gray-500;
+    &:hover {
+      color: white;    
+    }
+    &.active {
+      color: white;
+    }
+  }
+
+  &.collapsed {
+    left: -12.5rem;
+
+    .add-entity {
+      font-size: 1.5rem;
+    }
+  }
+
+  
+  &.expanded {
+    left: 0rem;
+  }
+}

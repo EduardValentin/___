@@ -1,6 +1,6 @@
 import superagent from 'superagent-bluebird-promise';
 import store from 'store.js';
-import { getSession } from 'session.js';
+import { getUserToken } from 'session.js';
 import { omit, mapObjIndexed } from 'ramda';
 import { appError } from 'ducks/app.js';
 
@@ -16,7 +16,7 @@ function createFullUrl(url) {
 }
 
 export function request(method, url, params) {
-  let promise = superagent(method, createFullUrl(url)).set(defaultHeaders).set({ PASSWORD: getSession() });
+  let promise = superagent(method, createFullUrl(url)).set(defaultHeaders).set({ AUTHORIZATION: getUserToken() });
 
   if (params) {
     if (method === 'GET') {
@@ -30,7 +30,7 @@ export function request(method, url, params) {
 }
 
 export function simpleRequest(method, url, params) {
-  let promise = superagent(method, createFullUrl(url)).set(defaultHeaders).set({ PASSWORD: getSession() });
+  let promise = superagent(method, createFullUrl(url)).set(defaultHeaders).set({ AUTHORIZATION: getUserToken() });
 
   if (params) {
     if (method === 'GET') {
@@ -55,7 +55,7 @@ function handleError(err) {
 }
 
 // form Data file upload
-export function uploadFile(url, file, fields = {}, onProgress = () => {}) {
+export function uploadFile(url, file, fields = {}, onProgress = () => { }) {
   const request = superagent('POST', createFullUrl(url))
     .set(omit(['Content-Type'], defaultHeaders)) // superagent will set conten Type to multi part automatically
     .on('progress', onProgress);

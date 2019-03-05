@@ -6,7 +6,8 @@ function mapDispatchToProps() {
 }
 
 function mapStateToProps() {
-  return {};
+  return {
+  };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Sidebar);
