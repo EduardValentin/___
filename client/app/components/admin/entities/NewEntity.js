@@ -4,30 +4,42 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { Component } from 'react';
 import uuid from 'uuid-js';
-import Select from 'lib/forms/Select';
-import Input from 'lib/forms/Input';
-import { adjust, findIndex, propEq } from 'ramda';
-import { FIELD_TYPES, asDropdownOptions } from 'components/admin/field_types';
-import { haltEvent } from 'utils';
+import {
+  adjust,
+  findIndex,
+  propEq,
+  reject,
+} from 'ramda';
+import debounce from 'lodash.debounce';
+import NewField from './NewField';
 
 const newField = {
-  type: null,
+  type: 'text_input',
   name: null,
 };
 
 class NewEntity extends Component {
+  handleInputTyping = debounce(value => {
+    this.setState({
+      name: value,
+    });
+  }, 500);
+
+  handleFieldNameChange = debounce((field, value) => {
+    const { fields } = this.state;
+
+    const index = this._findFieldWithId(field.id);
+    this.setState({
+      fields: adjust((elem) => ({ ...elem, name: value }), index, fields),
+    });
+  }, 500);
+
   constructor(props) {
     super(props);
     this.state = {
       name: null,
       fields: [],
     };
-  }
-
-  handleInputTyping = e => {
-    this.setState({
-      [e.target.name]: e.target.value,
-    });
   }
 
   addNewField = () => {
@@ -43,8 +55,8 @@ class NewEntity extends Component {
     return findIndex(propEq('id', id), fields);
   }
 
-  handleSelect = (id, option) => {
-    const index = this._findFieldWithId(id);
+  handleSelect = (field, option) => {
+    const index = this._findFieldWithId(field.id);
 
     this.setState(prevState => ({
       fields: adjust((obj) => ({
@@ -54,16 +66,9 @@ class NewEntity extends Component {
     }));
   }
 
-  handleFieldNameChange = (id, e) => {
-    const index = this._findFieldWithId(id);
-
-    const { value } = e.target;
-
+  fieldDeleteHandler = (field) => {
     this.setState(prevState => ({
-      fields: adjust((obj) => ({
-        ...obj,
-        name: value,
-      }), index, prevState.fields),
+      fields: reject((elem) => elem.id === field.id, prevState.fields),
     }));
   }
 
@@ -75,16 +80,18 @@ class NewEntity extends Component {
     const {
       fields,
     } = this.state;
-
-    const typesOptions = asDropdownOptions(FIELD_TYPES);
+    console.log(this.props);
 
     return (
-      <div className="new-entity-page">
-        <div className="w-50">
-          <div className="form-group">
+      <div className="new-entity-page w-100">
+        <div>
+          <div className="form-group w-25">
             <label htmlFor="name">Entity Name:</label>
             <input
-              onChange={this.handleInputTyping}
+              onChange={(e) => {
+                const { value } = e.target;
+                this.handleInputTyping(value);
+              }}
               className="form-control"
               placeholder="Enter entity name"
               type="text"
@@ -99,25 +106,14 @@ class NewEntity extends Component {
 
           {fields.map(field => {
             return (
-              <div key={field.id} className="d-flex align-items-center">
-                <Input
-                  input={{
-                    onChange: (e) => this.handleFieldNameChange(field.id, e),
-                    name: field.id,
-                    placeholder: 'Field name',
-                  }}
-                  type="text"
-                  label="Name"
-                  className="mr-2 w-50"
-                />
-                <Select
-                  groupClass="w-50"
-                  placeholder="Field type"
-                  label="Type"
-                  options={typesOptions}
-                  onChange={(opt) => this.handleSelect(field.id, opt)}
-                />
-              </div>
+              <NewField
+                key={field.id}
+                field={field}
+                className="w-100"
+                handleSelect={this.handleSelect}
+                fieldDeleteHandler={this.fieldDeleteHandler}
+                handleFieldNameChange={this.handleFieldNameChange}
+              />
             );
           })}
 
@@ -129,7 +125,7 @@ class NewEntity extends Component {
           </button>
 
           <button
-            onClick={e => haltEvent(() => handleSubmit(this.state), e)}
+            onClick={() => handleSubmit(this.state)}
             className="btn d-block my-2 btn-primary btn-sm"
           >
             Submit

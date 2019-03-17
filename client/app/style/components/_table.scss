@@ -1,0 +1,11 @@
+.table {
+  .row {
+    @extend .py-1;
+  }
+
+  .header {
+    background: linear-gradient(to right, #e0e0e0 0%, #edeff1 53%, #f8f9fa 100%);
+    font-weight: 600;
+  }
+
+}

@@ -46,12 +46,14 @@ export default class Select extends Component {
       groupClass,
       getOptionValue,
       value,
+      defaultValue,
       styles = {},
       options,
       DropdownIndicator,
     } = this.props;
 
     const SelectComp = creatable ? Creatable : ReactSelect;
+
     return (
       <div className={classnames(groupClass, 'form-group')}>
         {label && (
@@ -67,37 +69,13 @@ export default class Select extends Component {
           value={parseValue(input.value || value, options, getOptionValue)}
           isMulti={isMulti}
           placeholder={placeholder}
+          defaultValue={defaultValue}
           className={classnames(inputClass)}
           classNamePrefix="custom-select"
           components={{
             DropdownIndicator,
           }}
           styles={{
-            // indicatorSeparator: () => undefined,
-            // control: () => ({
-            //   background: '#31404e',
-            //   display: 'flex',
-            // }),
-            // menu: () => ({
-            //   background: '#283643',
-            //   position: 'absolute',
-            //   width: '100%',
-            //   'z-index': 1,
-            // }),
-            // option: (styles, { isDisabled }) => ({
-            //   color: isDisabled ? '#536a7f' : '#dee2e6',
-            //   padding: '8px',
-            //   cursor: isDisabled ? 'initial' : 'pointer',
-            //   ':hover': {
-            //     backgroundColor: isDisabled ? '#31404e' : '#24303c',
-            //   },
-            // }),
-            // singleValue: () => ({
-            //   color: '#dee2e6',
-            // }),
-            // input: () => ({
-            //   color: '#dee2e6',
-            // }),
             ...styles,
           }
           }

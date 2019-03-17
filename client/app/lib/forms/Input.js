@@ -8,6 +8,7 @@ const Input = (props) => {
     input,
     label,
     type,
+    defaultValue,
     className,
   } = props;
 
@@ -18,7 +19,7 @@ const Input = (props) => {
           {label}
         </label>
       )}
-      <input {...input} id={input.name} type={type} className="form-control" />
+      <input defaultValue={defaultValue} {...input} id={input.name} type={type} className="form-control" />
       {touched && error && <span className="error">{error}</span>}
     </div>
   );

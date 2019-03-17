@@ -21,9 +21,10 @@ class Admin extends Component {
   }
 
   render() {
+    const { location: { pathname } } = this.props;
     return (
-      <div className="bg-admin-bg-color overflow-auto admin">
-        {!getUserToken() && <Redirect to="/admin/login" />}
+      <div className="bg-admin-bg-color container-fluid overflow-auto admin">
+        {!getUserToken() && pathname !== '/admin/login' && <Redirect to="/admin/login" />}
         <Switch>
           <Route exact path="/admin/login" component={LoginForm} />
           <PrivateRoute

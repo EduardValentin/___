@@ -5,7 +5,7 @@ import Input from 'lib/forms/Input';
 const Login = (props) => {
   const { handleSubmit } = props;
   return (
-    <div className="login-form d-flex align-items-center justify-content-center h-100">
+    <div className="login-form d-flex align-items-center justify-content-center">
       <div className="login-panel p-4 shadow">
         <h3>Log in</h3>
         <form onSubmit={handleSubmit}>

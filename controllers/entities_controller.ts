@@ -1,11 +1,11 @@
 import { Response, Request, NextFunction } from 'express';
 import Database from '../models/index';
-import { reduce, map } from 'ramda';
-import { verifyEntityOrFields, removeCommaFromQuery } from '../utils/utils';
+import { reduce, map, trim } from 'ramda';
+import { removeCommaFromQuery } from '../utils/utils';
 import DatabasePool from '../DatabasePool';
 import { Pool } from 'pg';
 
-const column_definitions: Record<UIControlType, string> = {
+export const column_definitions: Record<UIControlType, string> = {
   checkmark_input: 'BOOLEAN NOT NULL',
   text_input: 'TEXT NOT NULL',
   date_input: 'DATE NOT NULL',
@@ -26,12 +26,6 @@ export default class EntitiesController {
     }
 
     try {
-      // validity checks
-      verifyEntityOrFields(reqBody.name);
-      reqBody.fields.forEach(field => {
-        verifyEntityOrFields(field.name);
-      });
-
       const tableDefinition = reduce((acc: string, elem: EntityField) => {
         let columnType = null;
 
@@ -67,15 +61,21 @@ export default class EntitiesController {
       });
 
       // For every field we add a record in UIControl table with foreign key to entity record
-      reqBody.fields.forEach(async (field: EntityField) => {
-        await Database.UIControl.create({
-          name: field.name,
-          type: field.type,
-          entity_id: entity.id,
-        });
-      });
+      const fields = reqBody.fields.map((field: EntityField) => ({
+        name: field.name,
+        type: field.type,
+        entity_id: entity.id,
+      }));
 
-      const response = await Database.Entity.all();
+      await Database.UIControl.bulkCreate(fields);
+
+      // Fetch the saved entity including UIControls 
+      const response = await Database.Entity.find({
+        where: {
+          id: entity.id,
+        },
+        include: [Database.UIControl],
+      });
 
       res.status(200).send({
         data: response,
@@ -103,87 +103,74 @@ export default class EntitiesController {
         where: {
           id: entity_id,
         }
-      })
+      });
 
+      const promises = [];
 
-      const actions = reqBody.fields.reduce((acc: string, elem: EditEntityField) => {
-        let actionText = '';
+      const actions = map((elem: EditEntityField) => {
+        let actionText = `ALTER TABLE ${process.env.USER_TABLE_PREFIX}${entity.name}`;
+        const elementName = trim(elem.name);
+
         switch (elem.action) {
           case 'add':
-            verifyEntityOrFields(elem.name);
-            actionText = 'ADD COLUMN ' + elem.name + ' ' + column_definitions[elem.type] + ', ';
-            break;
+            promises.push(Database.UIControl.create({
+              entity_id,
+              name: elementName,
+              type: elem.type,
+            }));
 
+            console.log(`${actionText} ADD COLUMN ${elementName} ${column_definitions[elem.type]};`);
+
+            return `${actionText} ADD COLUMN ${elementName} ${column_definitions[elem.type]};`;
           case 'drop':
-            verifyEntityOrFields(elem.name);
-            actionText = 'DROP COLUMN ' + elem.name + ' CASCADE ,';
-            break;
-
+            promises.push(Database.UIControl.destroy({
+              where: {
+                name: elementName,
+                entity_id,
+              }
+            }));
+            return `${actionText} DROP COLUMN ${trim(elementName)} CASCADE;`;
           case 'rename':
-            verifyEntityOrFields(elem.name);
-            verifyEntityOrFields(elem.old_name);
-            actionText = 'RENAME COLUMN ' + elem.old_name + ' TO ' + elem.name + ', ';
-            break;
+            const oldName = trim(elem.old_name);
+            promises.push(Database.UIControl.update({ name: elementName }, {
+              where: {
+                name: oldName,
+                entity_id: entity_id,
+              }
+            }));
 
+            return `${actionText} RENAME COLUMN ${oldName} TO ${elementName};`;
           case 'rename_table':
-            verifyEntityOrFields(elem.name);
-            actionText = 'RENAME TO ' + process.env.USER_TABLE_PREFIX + elem.name + ', ';
-            break;
+            promises.push(Database.Entity.update({ name: elementName }, {
+              where: {
+                id: entity_id,
+              }
+            }));
 
+            return `${actionText} RENAME TO  ${process.env.USER_TABLE_PREFIX}${elementName};`;
           default:
             res.status(404).send({
               message: 'Action provided was not found',
             });
             break;
         }
-        return acc + actionText;
-      }, ' ')
+      })(reqBody.fields);
+      console.log(actions);
 
-      let queryText = `ALTER TABLE ${process.env.USER_TABLE_PREFIX}${entity.name} ${removeCommaFromQuery(actions)}`;
-      await this.pool.query(queryText);
-
-      reqBody.fields.forEach(field => {
-        switch (field.action) {
-          case 'add':
-            Database.UIControl.create({
-              entity_id,
-              name: field.name,
-              type: field.type,
-            });
-            break;
-
-          case 'drop':
-            Database.UIControl.destroy({
-              where: {
-                name: field.name,
-                entity_id,
-              }
-            });
-            break;
-
-          case 'rename':
-            Database.UIControl.update({
-              name: field.name,
-            }, {
-                where: {
-                  name: field.old_name,
-                }
-              });
-            break;
-
-          case 'rename_table':
-            Database.Entity.update({
-              name: field.name,
-            }, {
-                where: {
-                  id: entity_id,
-                }
-              });
-            break;
-        }
+      actions.forEach(action => {
+        promises.push(this.pool.query(action));
       });
 
-      const response = await Database.Entity.all();
+      await Promise.all(promises);
+
+      const response = await Database.Entity.find({
+        where: {
+          id: entity_id,
+        },
+        include: [Database.UIControl],
+      });
+
+      console.log(response.toJSON());
 
       res.status(200).send({
         data: response,
@@ -220,8 +207,7 @@ export default class EntitiesController {
 
       // Delete the user table
       await this.pool.query(`DROP TABLE ${process.env.USER_TABLE_PREFIX}${entity.name}`);
-      res.status(204).send();
-
+      res.status(204).send({});
     } catch (error) {
       res.status(500).send({ error: error.message });
     }
@@ -229,7 +215,9 @@ export default class EntitiesController {
 
   public fetchAll = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const entities = await Database.Entity.all();
+      const entities = await Database.Entity.all({
+        include: [Database.UIControl],
+      });
       res.status(200).send({ data: entities });
     } catch (error) {
       res.status(500).send({ error: error.message });

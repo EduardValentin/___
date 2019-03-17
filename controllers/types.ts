@@ -7,7 +7,7 @@ interface EntityField {
 }
 
 interface EditEntityField {
-  action: 'rename' | 'drop' | 'add' | 'rename_table',
+  action: 'rename' | 'drop' | 'add' | 'modify' | 'rename_table',
   name: string,
   type?: UIControlType,
   old_name?: string,

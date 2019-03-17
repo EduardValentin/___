@@ -1,18 +1,21 @@
 import { connect } from 'react-redux';
-import pathOr from 'ramda/es/pathOr';
-import { fetchOne } from 'ducks/entities.js';
+import { pathOr, find } from 'ramda';
+import { deleteEntity } from 'ducks/entities.js';
 import EntityShow from './EntityShow.js';
 
 function mapDispatchToProps(dispatch, props) {
   const { match: { params: { entityId } } } = props;
   return {
-    fetchEntity: () => dispatch(fetchOne(entityId)),
+    deleteEntity: () => dispatch(deleteEntity(entityId)),
   };
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state, props) {
+  const entities = pathOr(null, ['entities'], state);
+  const { match: { params: { entityId } } } = props;
+
   return {
-    entities: pathOr(null, ['entities'], state),
+    entity: find(entity => entity.id === parseInt(entityId, 10), entities.data),
   };
 }
 

@@ -1,7 +1,6 @@
 import { Route, Switch } from 'react-router-dom';
 import React, { Component, Fragment } from 'react';
 import { equals } from 'ramda';
-import LoadingSpinner from 'lib/components/LoadingSpinner';
 import AdminContainer from './admin/AdminContainer';
 
 class Application extends Component {
@@ -42,9 +41,6 @@ class Application extends Component {
       const importedTemplate = await import(`templates/${template.data.setting_value}/App.js`);
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState({ TemplateComponent: importedTemplate.default });
-
-      // // Import the css file for the selected template
-      // import(`templates/${setting_value}/style.js`);
     }
   }
 
@@ -62,7 +58,7 @@ class Application extends Component {
     const { template } = this.props;
 
     if (!TemplateComponent || template.loading) {
-      return <LoadingSpinner />;
+      return null;
     }
 
     return (

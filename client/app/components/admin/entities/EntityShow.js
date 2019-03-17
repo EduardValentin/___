@@ -1,44 +1,86 @@
 import React, { Component } from 'react';
-import find from 'ramda/es/find';
 import LoadingSpinner from 'lib/components/LoadingSpinner';
+import Modal from 'lib/components/modal/Modal';
+import ModalHeader from 'lib/components/modal/ModalHeader';
+import { Link } from 'react-router-dom';
 
 class EntityShow extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      deleteModalOpen: false,
+    };
   }
 
-  componentDidMount() {
-    const { fetchEntity } = this.props;
-    fetchEntity();
+  toggle = prop => () => {
+    this.setState(prevState => ({
+      [prop]: !prevState[prop],
+    }));
   }
+
+  // handleSelect = (opt, fieldId) => {
+  //   this.addAction({
+  //     on: fieldId,
+  //     action: 'modify',
+  //     type: opt.value,
+  //   });
+  // }
+
 
   render() {
     const {
-      match: { params: { entityId } },
-      entities,
+      entity,
+      deleteEntity,
+      match: {
+        params: {
+          entityId,
+        },
+      },
     } = this.props;
 
-    const thisEntity = find(entity => entity.id === parseInt(entityId, 10), entities.data);
+    const { deleteModalOpen } = this.state;
 
-    if (entities.loading || thisEntity.loading) {
+    if (!entity || !entity.UIControls) {
       return <LoadingSpinner />;
     }
 
-
-    console.log(thisEntity);
-
     return (
       <div className="entity-show w-100">
-        <div className="action-bar w-100 d-flex justify-content-between">
-          <div>{thisEntity.name}</div>
+        <Modal show={deleteModalOpen}>
+          <ModalHeader closeModal={this.toggle('deleteModalOpen')} />
+          <div>
+            <div>Are you sure you want to delete the entity</div>
+            <div className="d-flex mt-2 justify-content-center">
+              <div onClick={this.toggle('deleteModalOpen')} className="btn btn-gray-200 mr-2">No</div>
+              <div onClick={deleteEntity} className="btn btn-danger">Yes</div>
+            </div>
+          </div>
+        </Modal>
+
+        <div className="action-bar mb-4 w-100 d-flex justify-content-between">
+          <h3 className="text-black">{entity.name}</h3>
 
           <div>
-            <div className="btn btn-gray-200 mr-2">Edit</div>
-            <div className="btn btn-danger">Delete</div>
+            <Link to={`/admin/entities/${entityId}/edit`} className="btn btn-gray-200 mr-2">Edit</Link>
+            <div onClick={this.toggle('deleteModalOpen')} className="btn btn-danger">Delete</div>
           </div>
         </div>
-        <h4>Fields:</h4>
+
+        {entity.UIControls.map(field => {
+          return (
+            <div className="row py-2 stripes">
+              <div className="col">
+                <div>Name:</div>
+                <div>{field.name}</div>
+              </div>
+
+              <div className="col">
+                <div>Type:</div>
+                <div>{field.type}</div>
+              </div>
+            </div>
+          );
+        })}
       </div>
     );
   }

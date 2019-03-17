@@ -7,7 +7,6 @@ import EntitiesContainer from './entities/EntitiesContainer';
 import ProfilleContainer from './profille/ProfilleContainer';
 import SettingsContainer from './settings/SettingsContainer';
 import SidebarContainer from './sidebar/SidebarContainer';
-import NewEntityContainer from './entities/NewEntityContainer';
 
 class AdminContent extends Component {
   constructor(props) {
@@ -58,7 +57,7 @@ class AdminContent extends Component {
       subLinks: entities.data.map(entity => {
         return {
           name: entity.name,
-          path: `/admin/entities/${entity.id}`,
+          path: `/admin/entities/${entity.id}/records`,
         };
       }),
     }];
@@ -76,8 +75,7 @@ class AdminContent extends Component {
           <Switch>
             {/* TODO: Change to private routes */}
             <Route exact path="/admin/profille" component={ProfilleContainer} />
-            <Route exact path="/admin/entities/new" component={NewEntityContainer} />
-            <Route exact path="/admin/entities/:segment?" component={EntitiesContainer} />
+            <Route path="/admin/entities" component={EntitiesContainer} />
             <Route exact path="/admin/settings" component={SettingsContainer} />
           </Switch>
         </div>

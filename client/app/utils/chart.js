@@ -20,7 +20,7 @@ export const computeDimension = (dimension, marginX, marginY) => {
 };
 
 export function wrapSvgText(text, width) {
-  text.each(function () {
+  text.each(() => {
     const text = d3.select(this);
     const words = text.text().split(/\s+/).reverse();
     let word;

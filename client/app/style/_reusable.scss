@@ -5,3 +5,16 @@
 .btn {
   min-width: 6rem;
 }
+
+.action-icon {
+  margin-bottom: 1rem;
+  padding: 0.4rem 0.7rem;
+  border-radius: 5px;
+  box-shadow: 0px 0px 2px darkgrey;
+  transition: box-shadow .2s ease-in-out;
+  cursor: pointer;
+  
+  &:hover {
+    box-shadow: 0px 0px 2px rgb(78, 78, 78);
+  }
+}

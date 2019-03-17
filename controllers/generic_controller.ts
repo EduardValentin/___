@@ -3,6 +3,7 @@ import { Pool } from 'pg';
 import { map, prop, compose, reduce } from 'ramda';
 import { verifyEntityOrFields, removeCommaFromQuery, appendTablePrefix } from '../utils/utils';
 import DatabasePool from '../DatabasePool';
+import Database from '../models/index';
 
 
 export default class GenericController {
@@ -17,14 +18,19 @@ export default class GenericController {
    */
   public createRecord = async (req: Request, res: Response, next: NextFunction) => {
     const reqBody: GenericRequestBody = req.body;
-    try {
-      verifyEntityOrFields(reqBody.entity_name);
+    const { entity_id } = req.params;
 
+    const entity = await Database.Entity.find({
+      where: {
+        id: entity_id,
+      }
+    });
+
+    try {
       const keys = compose(
         removeCommaFromQuery,
         reduce(
           (acc: string, elem: GenericFieldType) => {
-            verifyEntityOrFields(elem.name);
             return acc + elem.name + ',';
           }, '')
       )(reqBody.fields);
@@ -42,8 +48,7 @@ export default class GenericController {
 
       const values = reqBody.fields.map(field => field.value);
 
-      const queryText = `INSERT INTO ${process.env.USER_TABLE_PREFIX}${reqBody.entity_name} (${keys}) VALUES (${placeholders})`;
-      console.log(queryText, values);
+      const queryText = `INSERT INTO ${process.env.USER_TABLE_PREFIX}${entity.name} (${keys}) VALUES (${placeholders})`;
 
       const result = await this.pool.query(queryText, values);
 
@@ -54,7 +59,7 @@ export default class GenericController {
     } catch (error) {
       console.log(error.message);
       res.status(500).send({
-        error: error.message,
+        message: error.message,
       });
     }
 
@@ -65,25 +70,29 @@ export default class GenericController {
    */
   public editRecord = async (req: Request, res: Response, next: NextFunction) => {
     const reqBody: GenericRequestBody = req.body;
-    try {
-      verifyEntityOrFields(reqBody.entity_name);
 
+    const { entity_id } = req.params;
+
+    const entity = await Database.Entity.find({
+      where: {
+        id: entity_id,
+      }
+    });
+
+    try {
       let i = 0;
       const changes = compose(
         removeCommaFromQuery,
         reduce(
           (acc: string, elem: GenericFieldType) => {
-            verifyEntityOrFields(elem.name);
             i += 1;
             return acc + elem.name + '=' + '$' + i + ',';
           }, ''),
       )(reqBody.fields);
 
       i += 1;
-      const queryText = `UPDATE ${process.env.USER_TABLE_PREFIX}${reqBody.entity_name} SET ${changes} WHERE id=$${i};`;
+      const queryText = `UPDATE ${process.env.USER_TABLE_PREFIX}${entity.name} SET ${changes} WHERE id=$${i};`;
       const values = map(prop('value'), reqBody.fields);
-
-      console.log(queryText, [...values, req.params.record_id]);
 
       const result = await this.pool.query(queryText, [...values, req.params.record_id]);
       res.status(200).send({
@@ -91,7 +100,7 @@ export default class GenericController {
       });
     } catch (error) {
       res.status(500).send({
-        error: error.message,
+        message: error.message,
       });
     }
 
@@ -102,10 +111,17 @@ export default class GenericController {
    */
   public deleteRecord = async (req: Request, res: Response, next: NextFunction) => {
     const reqBody: GenericRequestBody = req.body;
+
+    const { entity_id } = req.params;
+
+    const entity = await Database.Entity.find({
+      where: {
+        id: entity_id,
+      }
+    });
+
     try {
-      verifyEntityOrFields(reqBody.entity_name);
-      const queryText = `DELETE FROM ${process.env.USER_TABLE_PREFIX}${reqBody.entity_name} WHERE id=$1`;
-      console.log(queryText);
+      const queryText = `DELETE FROM ${process.env.USER_TABLE_PREFIX}${entity.name} WHERE id=$1`;
 
       const result = await this.pool.query(queryText, [req.params.record_id]);
 
@@ -114,31 +130,40 @@ export default class GenericController {
       });
     } catch (error) {
       res.status(500).send({
-        error: error.message,
+        message: error.message,
       });
     }
   };
 
   public fetchAll = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { entity_name } = req.body;
+      const { entity_id } = req.params;
 
-      verifyEntityOrFields(entity_name);
-
-      const result = await this.pool.query(`SELECT * FROM ${appendTablePrefix(entity_name)}`);
+      const entity = await Database.Entity.find({
+        where: {
+          id: entity_id,
+        }
+      });
+      const result = await this.pool.query(`SELECT * FROM ${appendTablePrefix(entity.name)}`);
       res.status(200).send({ data: result.rows });
     } catch (error) {
       res.status(500).send({
-        error: error.message,
+        message: error.message,
       });
     }
   };
   public fetchOne = async (req: Request, res: Response, next: NextFunction) => {
-    const { entity_name } = req.body;
-    const { record_id } = req.params;
+    const { record_id, entity_id } = req.params;
+
+    const entity = await Database.Entity.find({
+      where: {
+        id: entity_id,
+      }
+    });
+
     try {
-      verifyEntityOrFields(entity_name);
-      const result = await this.pool.query(`SELECT * FROM ${appendTablePrefix(entity_name)} WHERE id = $1`, [record_id]);
+      verifyEntityOrFields(entity.name);
+      const result = await this.pool.query(`SELECT * FROM ${appendTablePrefix(entity.name)} WHERE id = $1`, [record_id]);
       if (result) {
         res.status(200).send({ data: result.rows });
       } else {
@@ -146,7 +171,7 @@ export default class GenericController {
       }
     } catch (error) {
       res.status(500).send({
-        error: error.message,
+        message: error.message,
       });
     }
   };
