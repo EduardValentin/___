@@ -26,6 +26,17 @@
   &.collapsed {
     left: -12.5rem;
 
+    .link {
+      @extend .justify-content-end;
+    }
+    .arrow {
+      display: none;
+    }
+    .route-name {
+      display: none;
+      margin-right: 0;
+    }
+
     .add-entity {
       font-size: 1.5rem;
     }
@@ -34,5 +45,15 @@
   
   &.expanded {
     left: 0rem;
+    .link {
+      @extend .justify-content-between;
+    }
+    .icon {
+      margin-right: 1rem;
+    }
+    .route-name {
+      margin-right: 1rem;
+    }
+
   }
 }

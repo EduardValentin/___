@@ -2,7 +2,7 @@ import { createAction } from 'redux-actions';
 import Immutable from 'seamless-immutable';
 import * as Entities from 'api/entities';
 import { toast } from 'react-toastify';
-import findIndex from 'ramda/es/findIndex';
+import { findIndex, reject } from 'ramda';
 
 export default function reducer(state = Immutable({}), action) {
   switch (action.type) {
@@ -153,6 +153,7 @@ export const addRecordToEntity = (entity_id, params) => (dispatch, getState) => 
       data: r.body.data,
       path: ['data', index, 'records'],
     }));
+    window.location.hash = `/admin/entities/${entity_id}/records`;
     toast.success('Record added');
   }).catch(error => {
     toast.error(error.body ? error.body.message : error.message);
@@ -169,8 +170,40 @@ export const editRecordfromEntity = (entity_id, record_id, params) => (dispatch,
       data: r.body.data,
       path: ['data', index, 'records', recordIndex],
     }));
-    toast.success('Record added');
+    window.location.hash = `/admin/entities/${entity_id}/records`;
+    toast.success('Record modified');
   }).catch(error => {
+    toast.error(error.body ? error.body.message : error.message);
+  });
+};
+
+
+export const deleteRecord = (entity_id, record_id, callback) => (dispatch, getState) => {
+  dispatch(setRecord({
+    type: 'loading',
+    value: true,
+  }));
+  return Entities.deleteRecord(entity_id, record_id).then(() => {
+    dispatch(setRecord({
+      type: 'loading',
+      value: false,
+    }));
+    const { entities } = getState();
+    const index = findIndex(entity => parseInt(entity.id, 10) === parseInt(entity_id, 10), entities.data);
+    dispatch(setInRecord({
+      data: reject(record => record.id === parseInt(record_id, 10), entities.data[index].records),
+      path: ['data', index, 'records'],
+    }));
+    toast.success('Record modified');
+
+    if (callback) {
+      callback();
+    }
+  }).catch(error => {
+    dispatch(setRecord({
+      type: 'loading',
+      value: false,
+    }));
     toast.error(error.body ? error.body.message : error.message);
   });
 };

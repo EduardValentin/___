@@ -3,6 +3,7 @@ import LoadingSpinner from 'lib/components/LoadingSpinner';
 import { dissoc } from 'ramda';
 import UiControl from './ui_control/UiControl';
 
+
 class RecordForm extends Component {
   constructor(props) {
     super(props);
@@ -20,7 +21,6 @@ class RecordForm extends Component {
     const { match: { params }, entity } = this.props;
     if (params.action === 'edit' && entity.records !== prevProps.entity.records) {
       const thisRecord = entity.records.find(record => record.id.toString() === params.recordId);
-
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState({ ...dissoc('id', thisRecord) });
     }
@@ -48,13 +48,13 @@ class RecordForm extends Component {
       <div className="w-100">
         <div className="w-50">
           {entity.UIControls.map(ui_control => {
+            const controlName = ui_control.name.toLowerCase();
             // eslint-disable-next-line react/destructuring-assignment
-            const value = this.state[ui_control.name];
-
+            const value = this.state[controlName];
             return (
               <UiControl
                 key={ui_control.id}
-                onChange={(value => this.setRecordValue(ui_control.name, value))}
+                onChange={(value => this.setRecordValue(controlName, value))}
                 value={value}
                 {...ui_control}
               />

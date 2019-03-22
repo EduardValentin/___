@@ -17,6 +17,11 @@ exports.column_definitions = {
     text_input: 'TEXT NOT NULL',
     date_input: 'DATE NOT NULL',
 };
+exports.default_values = {
+    checkmark_input: 'false',
+    text_input: '\'\'',
+    date_input: 'sysdate',
+};
 class EntitiesController {
     constructor() {
         this.createEntity = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
@@ -101,8 +106,8 @@ class EntitiesController {
                                 name: elementName,
                                 type: elem.type,
                             }));
-                            console.log(`${actionText} ADD COLUMN ${elementName} ${exports.column_definitions[elem.type]};`);
-                            return `${actionText} ADD COLUMN ${elementName} ${exports.column_definitions[elem.type]};`;
+                            console.log(`${actionText} ADD COLUMN ${elementName} ${exports.column_definitions[elem.type]} DEFAULT ${exports.default_values[elem.type]};`);
+                            return `${actionText} ADD COLUMN ${elementName} ${exports.column_definitions[elem.type]} DEFAULT ${exports.default_values[elem.type]};`;
                         case 'drop':
                             promises.push(index_1.default.UIControl.destroy({
                                 where: {

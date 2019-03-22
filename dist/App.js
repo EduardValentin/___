@@ -5,6 +5,7 @@ const user_1 = require("./routes/user");
 const settings_1 = require("./routes/settings");
 const entities_1 = require("./routes/entities");
 const generic_1 = require("./routes/generic");
+const templates_1 = require("./routes/templates");
 const Path = require("path");
 class App {
     constructor() {
@@ -24,6 +25,7 @@ class App {
         this.express.use('/api/v1/settings', settings_1.default);
         this.express.use('/api/v1/entities', entities_1.default);
         this.express.use('/api/v1/generic_entities', generic_1.default);
+        this.express.use('/api/v1/templates', templates_1.default);
     }
 }
 exports.default = new App().express;

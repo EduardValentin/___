@@ -3,9 +3,8 @@ import UserRouter from './routes/user';
 import SettingsRouter from './routes/settings';
 import EntitiesRouter from './routes/entities';
 import GenericRouter from './routes/generic';
-import verifyToken from './middlewares/verify_token';
+import TemplatesRouter from './routes/templates';
 import * as Path from 'path'
-import DatabasePool from './DatabasePool';
 
 class App {
   public express: Express.Application;
@@ -29,7 +28,7 @@ class App {
     this.express.use('/api/v1/settings', SettingsRouter);
     this.express.use('/api/v1/entities', EntitiesRouter);
     this.express.use('/api/v1/generic_entities', GenericRouter);
-
+    this.express.use('/api/v1/templates', TemplatesRouter);
   }
 
 }

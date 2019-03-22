@@ -16,8 +16,13 @@ export default (sequelize: Sequelize.Sequelize) => {
 
   const Entity = sequelize.define<EntityInstance, EntityAttributes>("Entity", attributes);
   Entity.associate = (models) => {
-    Entity.belongsTo(models.User, {
-      foreignKey: 'user_id',
+    // Entity.belongsTo(models.User, {
+    //   foreignKey: 'user_id',
+    //   targetKey: 'id',
+    // });
+
+    Entity.belongsTo(models.Template, {
+      foreignKey: 'template_id',
       targetKey: 'id',
     });
 

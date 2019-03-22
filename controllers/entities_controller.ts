@@ -11,6 +11,12 @@ export const column_definitions: Record<UIControlType, string> = {
   date_input: 'DATE NOT NULL',
 }
 
+export const default_values: Record<UIControlType, string> = {
+  checkmark_input: 'false',
+  text_input: '\'\'',
+  date_input: 'sysdate',
+}
+
 export default class EntitiesController {
   private pool: Pool;
   constructor() {
@@ -119,9 +125,9 @@ export default class EntitiesController {
               type: elem.type,
             }));
 
-            console.log(`${actionText} ADD COLUMN ${elementName} ${column_definitions[elem.type]};`);
+            console.log(`${actionText} ADD COLUMN ${elementName} ${column_definitions[elem.type]} DEFAULT ${default_values[elem.type]};`);
 
-            return `${actionText} ADD COLUMN ${elementName} ${column_definitions[elem.type]};`;
+            return `${actionText} ADD COLUMN ${elementName} ${column_definitions[elem.type]} DEFAULT ${default_values[elem.type]};`;
           case 'drop':
             promises.push(Database.UIControl.destroy({
               where: {

@@ -18,15 +18,6 @@ class EntityShow extends Component {
     }));
   }
 
-  // handleSelect = (opt, fieldId) => {
-  //   this.addAction({
-  //     on: fieldId,
-  //     action: 'modify',
-  //     type: opt.value,
-  //   });
-  // }
-
-
   render() {
     const {
       entity,

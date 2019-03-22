@@ -7,6 +7,14 @@ exports.default = {
             id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true, },
             name: { type: DataTypes.STRING, allowNull: false },
             type: { type: DataTypes.STRING, allowNull: true },
+            media_group_id: {
+                type: DataTypes.INTEGER,
+                allowNull: true,
+                references: {
+                    model: 'MediaGroups',
+                    key: 'id',
+                }
+            },
             createdAt: { type: Sequelize.DATE, allowNull: false },
             updatedAt: { type: Sequelize.DATE, allowNull: false },
         });

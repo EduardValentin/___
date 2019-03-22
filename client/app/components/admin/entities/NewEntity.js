@@ -80,7 +80,6 @@ class NewEntity extends Component {
     const {
       fields,
     } = this.state;
-    console.log(this.props);
 
     return (
       <div className="new-entity-page w-100">

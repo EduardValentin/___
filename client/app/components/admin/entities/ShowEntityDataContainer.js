@@ -1,11 +1,12 @@
 import { connect } from 'react-redux';
-import { fetchEntityRecords } from 'ducks/entities.js';
+import { fetchEntityRecords, deleteRecord } from 'ducks/entities.js';
 import { find } from 'ramda';
 import ShowEntityData from './ShowEntityData.js';
 
 function mapDispatchToProps(dispatch, props) {
   const { match: { params: { entityId } } } = props;
   return {
+    deleteRecord: (recordId, callback) => dispatch(deleteRecord(entityId, recordId, callback)),
     fetchRecords: () => dispatch(fetchEntityRecords(entityId)),
   };
 }

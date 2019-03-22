@@ -10,17 +10,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const ramda_1 = require("ramda");
 const utils_1 = require("../utils/utils");
-const DatabasePool_1 = require("../DatabasePool");
-const index_1 = require("../models/index");
+const entity_service_1 = require("../services/entity_service");
+const generic_service_1 = require("../services/generic_service");
 class GenericController {
     constructor() {
+        this.EntityService = null;
+        this.GenericService = null;
         /**
          * Adds a record in the generic entity
          */
         this.createRecord = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
             const reqBody = req.body;
             const { entity_id } = req.params;
-            const entity = yield index_1.default.Entity.find({
+            const entity = yield this.EntityService.find({
                 where: {
                     id: entity_id,
                 }
@@ -35,10 +37,10 @@ class GenericController {
                     return acc + '$' + i + ',';
                 }, ''))(reqBody.fields);
                 const values = reqBody.fields.map(field => field.value);
-                const queryText = `INSERT INTO ${process.env.USER_TABLE_PREFIX}${entity.name} (${keys}) VALUES (${placeholders})`;
-                const result = yield this.pool.query(queryText, values);
+                const queryText = `INSERT INTO ${process.env.USER_TABLE_PREFIX}${entity.name} (${keys}) VALUES (${placeholders}) RETURNING *`;
+                const result = yield this.GenericService.query(queryText, values);
                 res.status(200).send({
-                    result,
+                    result: result.rows,
                 });
             }
             catch (error) {
@@ -54,7 +56,7 @@ class GenericController {
         this.editRecord = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
             const reqBody = req.body;
             const { entity_id } = req.params;
-            const entity = yield index_1.default.Entity.find({
+            const entity = yield this.EntityService.find({
                 where: {
                     id: entity_id,
                 }
@@ -68,7 +70,7 @@ class GenericController {
                 i += 1;
                 const queryText = `UPDATE ${process.env.USER_TABLE_PREFIX}${entity.name} SET ${changes} WHERE id=$${i};`;
                 const values = ramda_1.map(ramda_1.prop('value'), reqBody.fields);
-                const result = yield this.pool.query(queryText, [...values, req.params.record_id]);
+                const result = yield this.GenericService.query(queryText, [...values, req.params.record_id]);
                 res.status(200).send({
                     result,
                 });
@@ -85,14 +87,14 @@ class GenericController {
         this.deleteRecord = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
             const reqBody = req.body;
             const { entity_id } = req.params;
-            const entity = yield index_1.default.Entity.find({
+            const entity = yield this.EntityService.find({
                 where: {
                     id: entity_id,
                 }
             });
             try {
                 const queryText = `DELETE FROM ${process.env.USER_TABLE_PREFIX}${entity.name} WHERE id=$1`;
-                const result = yield this.pool.query(queryText, [req.params.record_id]);
+                const result = yield this.GenericService.query(queryText, [req.params.record_id]);
                 res.status(200).send({
                     result,
                 });
@@ -106,12 +108,12 @@ class GenericController {
         this.fetchAll = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
             try {
                 const { entity_id } = req.params;
-                const entity = yield index_1.default.Entity.find({
+                const entity = yield this.EntityService.find({
                     where: {
                         id: entity_id,
                     }
                 });
-                const result = yield this.pool.query(`SELECT * FROM ${utils_1.appendTablePrefix(entity.name)}`);
+                const result = yield this.GenericService.query(`SELECT * FROM ${utils_1.appendTablePrefix(entity.name)}`);
                 res.status(200).send({ data: result.rows });
             }
             catch (error) {
@@ -122,14 +124,14 @@ class GenericController {
         });
         this.fetchOne = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
             const { record_id, entity_id } = req.params;
-            const entity = yield index_1.default.Entity.find({
+            const entity = yield this.EntityService.find({
                 where: {
                     id: entity_id,
                 }
             });
             try {
                 utils_1.verifyEntityOrFields(entity.name);
-                const result = yield this.pool.query(`SELECT * FROM ${utils_1.appendTablePrefix(entity.name)} WHERE id = $1`, [record_id]);
+                const result = yield this.GenericService.query(`SELECT * FROM ${utils_1.appendTablePrefix(entity.name)} WHERE id = $1`, [record_id]);
                 if (result) {
                     res.status(200).send({ data: result.rows });
                 }
@@ -143,7 +145,8 @@ class GenericController {
                 });
             }
         });
-        this.pool = DatabasePool_1.default.getInstance().getPool();
+        this.EntityService = new entity_service_1.default();
+        this.GenericService = new generic_service_1.default();
     }
 }
 exports.default = GenericController;

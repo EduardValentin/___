@@ -13,7 +13,7 @@ class ShowEntityData extends Component {
     const columnTypes = {};
 
     UIControls.forEach(ui_control => {
-      columnTypes[ui_control.name] = ui_control.type;
+      columnTypes[ui_control.name.toLowerCase()] = ui_control.type;
     });
 
     this.state = {
@@ -49,6 +49,7 @@ class ShowEntityData extends Component {
     const {
       entities,
       entity,
+      deleteRecord,
       match: {
         params: {
           entityId,
@@ -58,6 +59,7 @@ class ShowEntityData extends Component {
 
     const { columnTypes, recordIdToDelete } = this.state;
 
+
     if (entities.loading || !entity.records) {
       return <LoadingSpinner />;
     }
@@ -65,8 +67,6 @@ class ShowEntityData extends Component {
     const NoData = (
       <div className="h-100 w-100 d-flex align-items-center justify-content-center"> No data associated with this entity </div>
     );
-
-    console.log(this.props);
 
     return (
       <div className="w-100 show-entity-data">
@@ -76,7 +76,7 @@ class ShowEntityData extends Component {
             <div>Are you sure you want to delete this record</div>
             <div className="d-flex mt-2 justify-content-center">
               <div onClick={this.closeModal} className="btn btn-gray-200 mr-2">No</div>
-              <div onClick={() => { }} className="btn btn-danger">Yes</div>
+              <div onClick={() => deleteRecord(recordIdToDelete, this.closeModal)} className="btn btn-danger">Yes</div>
             </div>
           </div>
         </Modal>
@@ -86,56 +86,59 @@ class ShowEntityData extends Component {
 
           <div>
             <Link to={`/admin/entities/${entityId}`} className="btn btn-gray-300 mr-1 btn-sm">View Entity</Link>
-            <Link to={`/admin/entities/${entityId}/records/new`} className="btn btn-gray-300 btn-sm">Add Record</Link>
+            <Link to={`/admin/entities/${entityId}/records/create`} className="btn btn-gray-300 btn-sm">Add Record</Link>
           </div>
 
         </div>
         {entity.records.length === 0 && NoData}
-        <div className="container mt-4 table stripes">
+        {entity.records.length !== 0 && (
+          <div className="container mt-4 table stripes">
 
-          {/* Render header */}
+            {/* Render header */}
 
-          <div className="header row">
-            {keys(entity.records[0]).map(key => {
-              return <div key={key} className="col">{key}</div>;
-            })}
-            <div className="col" />
-          </div>
+            <div className="header row">
+              {keys(entity.records[0]).map(key => {
+                return <div key={key} className="col">{key}</div>;
+              })}
+              <div className="col" />
+            </div>
 
-          {/* Render rows */}
+            {/* Render rows */}
 
-          {entity.records.map(record => {
-            const allKeys = keys(record);
-            return (
-              <div key={record.id} className="row">
-                {allKeys.map((key) => {
-                  // Render columns
-                  let value;
-                  switch (columnTypes[key]) {
-                    case 'date_input':
-                      value = moment(record[key]).format('DD/MM/YYYY');
-                      break;
-                    case 'checkmark_input':
-                      value = record[key].toString();
-                      break;
-                    default:
-                      value = record[key];
-                      break;
-                  }
-                  return (
-                    <div className="col">
-                      {value}
-                    </div>
-                  );
-                })}
-                <div className="col row-actions d-flex">
-                  <Link className="text-gray-900" to={`/admin/entities/${entity.id}/records/edit/${record.id}`}>Edit</Link>
-                  <div className="text-danger ml-1 cursor-pointer" onClick={() => this.openModal(record.id)}>Delete</div>
+            {entity.records.map(record => {
+              const allKeys = keys(record);
+              return (
+                <div key={record.id} className="row">
+                  {allKeys.map((key) => {
+                    // Render columns
+                    let value;
+                    const lcKey = key.toLowerCase();
+                    switch (columnTypes[lcKey]) {
+                      case 'date_input':
+                        value = moment(record[lcKey]).format('DD/MM/YYYY');
+                        break;
+                      case 'checkmark_input':
+                        value = record[lcKey].toString();
+                        break;
+                      default:
+                        value = record[lcKey];
+                        break;
+                    }
+                    return (
+                      <div className="col">
+                        {value}
+                      </div>
+                    );
+                  })}
+                  <div className="col row-actions d-flex">
+                    <Link className="text-gray-900" to={`/admin/entities/${entity.id}/records/edit/${record.id}`}>Edit</Link>
+                    <div className="text-danger ml-1 cursor-pointer" onClick={() => this.openModal(record.id)}>Delete</div>
+                  </div>
                 </div>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
+        )}
       </div>
     );
   }

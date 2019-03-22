@@ -1,16 +1,18 @@
 import { Response, Request, NextFunction } from 'express';
-import { Pool } from 'pg';
 import { map, prop, compose, reduce } from 'ramda';
 import { verifyEntityOrFields, removeCommaFromQuery, appendTablePrefix } from '../utils/utils';
-import DatabasePool from '../DatabasePool';
-import Database from '../models/index';
+import EntityService from '../services/entity_service';
+import GenericService from '../services/generic_service';
+import { QueryResult } from 'pg';
 
 
 export default class GenericController {
-  private pool: Pool;
+  private EntityService = null;
+  private GenericService = null;
 
   constructor() {
-    this.pool = DatabasePool.getInstance().getPool();
+    this.EntityService = new EntityService();
+    this.GenericService = new GenericService();
   }
 
   /**
@@ -20,7 +22,7 @@ export default class GenericController {
     const reqBody: GenericRequestBody = req.body;
     const { entity_id } = req.params;
 
-    const entity = await Database.Entity.find({
+    const entity = await this.EntityService.find({
       where: {
         id: entity_id,
       }
@@ -48,12 +50,12 @@ export default class GenericController {
 
       const values = reqBody.fields.map(field => field.value);
 
-      const queryText = `INSERT INTO ${process.env.USER_TABLE_PREFIX}${entity.name} (${keys}) VALUES (${placeholders})`;
+      const queryText = `INSERT INTO ${process.env.USER_TABLE_PREFIX}${entity.name} (${keys}) VALUES (${placeholders}) RETURNING *`;
 
-      const result = await this.pool.query(queryText, values);
+      const result: QueryResult = await this.GenericService.query(queryText, values);
 
       res.status(200).send({
-        result,
+        result: result.rows,
       });
 
     } catch (error) {
@@ -73,7 +75,7 @@ export default class GenericController {
 
     const { entity_id } = req.params;
 
-    const entity = await Database.Entity.find({
+    const entity = await this.EntityService.find({
       where: {
         id: entity_id,
       }
@@ -94,7 +96,7 @@ export default class GenericController {
       const queryText = `UPDATE ${process.env.USER_TABLE_PREFIX}${entity.name} SET ${changes} WHERE id=$${i};`;
       const values = map(prop('value'), reqBody.fields);
 
-      const result = await this.pool.query(queryText, [...values, req.params.record_id]);
+      const result = await this.GenericService.query(queryText, [...values, req.params.record_id]);
       res.status(200).send({
         result,
       });
@@ -114,7 +116,7 @@ export default class GenericController {
 
     const { entity_id } = req.params;
 
-    const entity = await Database.Entity.find({
+    const entity = await this.EntityService.find({
       where: {
         id: entity_id,
       }
@@ -123,7 +125,7 @@ export default class GenericController {
     try {
       const queryText = `DELETE FROM ${process.env.USER_TABLE_PREFIX}${entity.name} WHERE id=$1`;
 
-      const result = await this.pool.query(queryText, [req.params.record_id]);
+      const result = await this.GenericService.query(queryText, [req.params.record_id]);
 
       res.status(200).send({
         result,
@@ -139,12 +141,12 @@ export default class GenericController {
     try {
       const { entity_id } = req.params;
 
-      const entity = await Database.Entity.find({
+      const entity = await this.EntityService.find({
         where: {
           id: entity_id,
         }
       });
-      const result = await this.pool.query(`SELECT * FROM ${appendTablePrefix(entity.name)}`);
+      const result = await this.GenericService.query(`SELECT * FROM ${appendTablePrefix(entity.name)}`);
       res.status(200).send({ data: result.rows });
     } catch (error) {
       res.status(500).send({
@@ -155,7 +157,7 @@ export default class GenericController {
   public fetchOne = async (req: Request, res: Response, next: NextFunction) => {
     const { record_id, entity_id } = req.params;
 
-    const entity = await Database.Entity.find({
+    const entity = await this.EntityService.find({
       where: {
         id: entity_id,
       }
@@ -163,7 +165,8 @@ export default class GenericController {
 
     try {
       verifyEntityOrFields(entity.name);
-      const result = await this.pool.query(`SELECT * FROM ${appendTablePrefix(entity.name)} WHERE id = $1`, [record_id]);
+      const result = await this.GenericService.query(`SELECT * FROM ${appendTablePrefix(entity.name)} WHERE id = $1`, [record_id]);
+
       if (result) {
         res.status(200).send({ data: result.rows });
       } else {

@@ -1,6 +1,13 @@
 .table {
+  overflow-x: auto;
+  min-height: 31.25rem;
   .row {
     @extend .py-1;
+    @extend .flex-nowrap;
+    
+    [class*="col"] {
+      min-width: 12.5rem;
+    }
   }
 
   .header {

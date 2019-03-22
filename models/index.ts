@@ -26,6 +26,7 @@ let db: DatabasebInterface = {
 	Settings: null,
 	Entity: null,
 	UIControl: null,
+	Template: null,
 };
 
 fs

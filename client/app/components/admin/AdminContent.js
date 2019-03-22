@@ -7,6 +7,7 @@ import EntitiesContainer from './entities/EntitiesContainer';
 import ProfilleContainer from './profille/ProfilleContainer';
 import SettingsContainer from './settings/SettingsContainer';
 import SidebarContainer from './sidebar/SidebarContainer';
+import TemplatesContainer from './templates/TemplatesContainer';
 
 class AdminContent extends Component {
   constructor(props) {
@@ -45,14 +46,17 @@ class AdminContent extends Component {
 
     const routes = [{
       name: 'Templates',
+      icon: <i className="icon ion-android-color-palette" />,
       path: '/admin/templates',
     },
     {
       name: 'Articles',
+      icon: <i className="icon ion-android-create" />,
       path: '/admin/articles',
     },
     {
       name: 'Entities',
+      icon: <i className="icon ion-cube" />,
       path: '/admin/entities',
       subLinks: entities.data.map(entity => {
         return {
@@ -76,6 +80,7 @@ class AdminContent extends Component {
             {/* TODO: Change to private routes */}
             <Route exact path="/admin/profille" component={ProfilleContainer} />
             <Route path="/admin/entities" component={EntitiesContainer} />
+            <Route path="/admin/templates" component={TemplatesContainer} />
             <Route exact path="/admin/settings" component={SettingsContainer} />
           </Switch>
         </div>

@@ -21,6 +21,7 @@ let db = {
     Settings: null,
     Entity: null,
     UIControl: null,
+    Template: null,
 };
 fs
     .readdirSync(__dirname)

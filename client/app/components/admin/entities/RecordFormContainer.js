@@ -18,7 +18,7 @@ function mapDispatchToProps(dispatch, props) {
       }, params);
       if (action === 'create') {
         dispatch(addRecordToEntity(entityId, values(fields)));
-      } else {
+      } else if (action === 'edit') {
         dispatch(editRecordfromEntity(entityId, recordId, values(fields)));
       }
     },

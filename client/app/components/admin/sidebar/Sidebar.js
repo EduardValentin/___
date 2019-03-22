@@ -83,17 +83,21 @@ class Sidebar extends Component {
         {routes.map(route => {
           return (
             <div key={route.path}>
-              <div className="link d-flex justify-content-between">
+              <div className="link d-flex">
                 <NavLink
                   activeClassName="active"
                   className="py-1"
                   to={route.path}
                 >
-                  {route.name}
+                  {route.icon}
+                  <span className="route-name">
+                    {route.name}
+                  </span>
                 </NavLink>
 
                 {route.subLinks && (
                   <ArrowIcon
+                    className="arrow"
                     direction={openedSubMenus[route.name] === true ? 'up' : 'down'}
                     onClick={() => this.toggleSubMenu(route.name)}
                   />
