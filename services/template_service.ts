@@ -13,11 +13,11 @@ export default class TemplateService {
   }
 
   public find = async (clause: FindOptions<EntityAttributes>) => {
-    return Database.Entity.find(clause);
+    return Database.Template.find(clause);
   }
 
   public insert = async (attributes: TemplateAttributes) => {
-    return Database.Template.insertOrUpdate(attributes);
+    return Database.Template.create(attributes);
   }
 
   public all = async () => {

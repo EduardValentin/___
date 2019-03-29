@@ -1,19 +1,19 @@
 import * as Sequelize from 'sequelize';
 export default {
   up: (queryInterface: Sequelize.QueryInterface, DataTypes: Sequelize.DataTypes) => {
-    queryInterface.createTable('Users',{
+    return queryInterface.createTable('Users', {
       id: { type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true },
       firstName: { type: Sequelize.STRING, allowNull: false },
       lastName: { type: Sequelize.STRING, allowNull: false },
-      email: { 
-        type: Sequelize.STRING, 
-        allowNull: false, 
-        unique: true, 
-        validate: { 
+      email: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        unique: true,
+        validate: {
           isEmail: {
             msg: 'Email is not a valid email address'
           }
-        } 
+        }
       },
       username: { type: Sequelize.STRING, allowNull: false, unique: true },
       password: { type: Sequelize.STRING, allowNull: false },
@@ -23,6 +23,6 @@ export default {
   },
 
   down: (queryInterface: Sequelize.QueryInterface, DataTypes: Sequelize.Sequelize) => {
-    queryInterface.dropTable('Users');
+    return queryInterface.dropTable('Users');
   }
 }

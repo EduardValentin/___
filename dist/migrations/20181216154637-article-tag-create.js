@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = {
     up: (queryInterface, DataTypes) => {
-        queryInterface.createTable('ArticlesTags', {
+        return queryInterface.createTable('ArticlesTags', {
             article_id: { type: DataTypes.INTEGER, primaryKey: true },
             tag_id: { type: DataTypes.INTEGER, primaryKey: true },
             createdAt: { type: DataTypes.DATE, allowNull: false },
@@ -10,7 +10,7 @@ exports.default = {
         });
     },
     down: (queryInterface, DataTypes) => {
-        queryInterface.dropTable('ArticlesTags');
+        return queryInterface.dropTable('ArticlesTags');
     }
 };
 //# sourceMappingURL=20181216154637-article-tag-create.js.map

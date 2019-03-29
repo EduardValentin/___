@@ -1,0 +1,9 @@
+.dropzone-root {
+    width: 100%;
+    height: 15rem;
+    border: 3px $gray-500 dotted;
+    background-color: #3fa6ff12;
+    .icon {
+        font-size: 2rem;
+    }
+}

@@ -4,7 +4,13 @@
   }
 
   .title { 
-    font-weight: 600;
     font-size: 1.05rem;
+  }
+
+  .thumb {
+    width: 20rem;
+    img {
+      width: 100%;
+    }
   }
 }

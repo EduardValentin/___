@@ -54,7 +54,7 @@ export default class EntitiesController {
       const queryText = `
       CREATE TABLE ${process.env.USER_TABLE_PREFIX}${reqBody.name} (
         id SERIAL PRIMARY KEY,
-        page_id INTEGER REFERENCES "public"."Pages" (id),
+        page_id INTEGER REFERENCES "public"."Pages" (id) ON DELETE SET NULL,
         ${removeCommaFromQuery(tableDefinition)} 
       );
     `;

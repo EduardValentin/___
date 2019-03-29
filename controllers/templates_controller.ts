@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import * as extract from 'extract-zip';
 import * as fs from 'fs';
 import TemplateService from '../services/template_service';
+import * as rimraf from 'rimraf';
 
 export default class TemplatesController {
   private Service: TemplateService;
@@ -12,26 +13,29 @@ export default class TemplatesController {
 
   createTemplate = async (req: Request, res: Response, next: NextFunction) => {
     const { body, file } = req;
+    console.log(file);
     try {
       const dir = `${__dirname}/../../client/app/templates/${body.name}`;
       fs.mkdirSync(dir);
-      extract(file.path, { dir }, (err) => {
+      extract(file.path, { dir }, async (err) => {
         if (err) {
           fs.rmdir(dir, () => { });
+          console.log(err.message);
           res.status(500).send({ message: err.message });
           return;
         }
 
-        this.Service.insert({
+        const templateCreated = await this.Service.insert({
           name: body.name,
           description: body.description,
           entity_id: body.entity_id,
         })
-        res.status(204).send();
+        res.status(200).send({ data: templateCreated.toJSON() });
       });
     }
-    catch (error) {
-      res.status(500).send({ message: error.message });
+    catch (err) {
+      console.log(err.message);
+      res.status(500).send({ message: err.message });
     }
   };
 
@@ -48,8 +52,24 @@ export default class TemplatesController {
   delete = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const template_id = req.params.id;
-      await this.Service.delete(template_id);
-      res.status(204).send();
+      const template = await this.Service.find({
+        where: {
+          id: template_id,
+        }
+      });
+
+      const dir = `${__dirname}/../../client/app/templates/${template.name}`;
+      rimraf(dir, async (error) => {
+        if (error) {
+          res.status(500).send({ message: error.message });
+          return;
+        }
+
+        console.log(`Deleted template at path: ${dir}`);
+
+        await this.Service.delete(template_id);
+        res.status(204).send();
+      });
 
     } catch (error) {
       res.status(500).send({ message: error.message });

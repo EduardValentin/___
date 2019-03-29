@@ -1,41 +1,98 @@
 import React, { Component } from 'react';
 import LoadingSpinner from 'lib/components/LoadingSpinner';
 import Dropzone from 'react-dropzone';
+import Select from 'lib/forms/Select';
+import debounce from 'lodash.debounce';
+import { haltEvent } from 'utils';
 
 class NewTemplate extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      file: null,
+      template: null,
     };
   }
 
   onDrop = (acceptedFiles, rejectedFiles) => {
-    this.setState({ file: acceptedFiles[0] });
+    this.setState({ template: acceptedFiles[0] });
+  }
+
+  handleInputTyping = debounce((e) => {
+    this.setState({
+      [e.target.name]: e.target.value,
+    })
+  }, 500);
+
+  handleSelect = option => {
+    this.setState({ entity_id: option.value });
   }
 
   render() {
     const {
       entities,
+      addNewTemplate,
     } = this.props;
 
-    const { file } = this.state;
+    const { template } = this.state;
+
+    const entitiesOptions = entities.data.map(entity => {
+      return {
+        label: entity.name,
+        value: entity.id,
+      };
+    });
 
     if (entities.loading) {
       return <LoadingSpinner />;
     }
 
+    console.log(this.state);
+
     return (
       <div className="new-template">
-        <span>Content here</span>
-        <Dropzone onDrop={this.onDrop}>
-          {({ getRootProps, getInputProps }) => (
-            <div className="dropzone-root" {...getRootProps()}>
-              <input {...getInputProps()} />
-              <p>Drag and drop some files here, or click to select files</p>
-            </div>
-          )}
-        </Dropzone>
+        <div className="content-wrapper">
+          <Dropzone accept=".zip" onDrop={this.onDrop}>
+            {({ getRootProps, getInputProps }) => (
+              <div className="dropzone-root mb-2 flex-column d-flex align-items-center justify-content-center" {...getRootProps()}>
+                <input {...getInputProps()} />
+                <div>Drop your archieve here in '.zip' format</div>
+                <i className="icon ion-ios-cloud-download" />
+                {template && (
+                  <div className="d-flex">
+                    <i className="text-green mr-1 ion-checkmark" />
+                    <div className="text-small">{template.name}</div>
+                  </div>
+                )}
+              </div>
+            )}
+          </Dropzone>
+
+          <div className="form-group">
+            <label htmlFor="name"> Name: * </label>
+            <input
+              className="form-control"
+              id="name"
+              name="name"
+              onChange={e => this.handleInputTyping(e.nativeEvent)}
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="description"> Description: </label>
+            <input
+              className="form-control"
+              id="description"
+              name="description"
+              onChange={e => this.handleInputTyping(e.nativeEvent)}
+            />
+          </div>
+          <Select
+            onChange={this.handleSelect}
+            label="Entity"
+            options={entitiesOptions.asMutable()}
+          />
+          <button onClick={haltEvent(() => addNewTemplate(this.state))} className="btn w-100 btn-sm btn-primary">Add</button>
+        </div>
       </div>
     );
   }

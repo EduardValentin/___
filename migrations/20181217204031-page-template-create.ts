@@ -2,7 +2,7 @@ import * as Sequelize from 'sequelize';
 
 export default {
   up: (queryInterface: Sequelize.QueryInterface, DataTypes: Sequelize.DataTypes) => {
-    queryInterface.createTable('PagesTemplates',{
+    return queryInterface.createTable('PagesTemplates', {
       page_id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
       template_id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
       createdAt: { type: Sequelize.DATE, allowNull: false },
@@ -11,6 +11,6 @@ export default {
   },
 
   down: (queryInterface: Sequelize.QueryInterface, DataTypes: Sequelize.Sequelize) => {
-    queryInterface.dropTable('PagesTemplates');
+    return queryInterface.dropTable('PagesTemplates');
   }
 }

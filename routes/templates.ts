@@ -8,12 +8,12 @@ const storage = multer.diskStorage({
   },
 });
 
-const upload = multer({ storage });
+const upload = multer({ storage, limits: { fileSize: 50 * 1024 * 1024, }, });
 const Controller = new TemplatesController();
 
 const router = Router();
 router.get('/', Controller.index);
-router.post('/create', upload.single('template'), Controller.createTemplate);
+router.post('/create', upload.single('file'), Controller.createTemplate);
 router.delete('/delete/:id', Controller.delete);
 
 export default router;

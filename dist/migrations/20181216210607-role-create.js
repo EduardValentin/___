@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Sequelize = require("sequelize");
 exports.default = {
     up: (queryInterface, DataTypes) => {
-        queryInterface.createTable('Roles', {
+        return queryInterface.createTable('Roles', {
             id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true, },
             name: { type: DataTypes.STRING, allowNull: false },
             createdAt: { type: Sequelize.DATE, allowNull: false },
@@ -11,7 +11,7 @@ exports.default = {
         });
     },
     down: (queryInterface, DataTypes) => {
-        queryInterface.dropTable('Roles');
+        return queryInterface.dropTable('Roles');
     }
 };
 //# sourceMappingURL=20181216210607-role-create.js.map

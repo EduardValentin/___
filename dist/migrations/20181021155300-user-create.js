@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Sequelize = require("sequelize");
 exports.default = {
     up: (queryInterface, DataTypes) => {
-        queryInterface.createTable('Users', {
+        return queryInterface.createTable('Users', {
             id: { type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true },
             firstName: { type: Sequelize.STRING, allowNull: false },
             lastName: { type: Sequelize.STRING, allowNull: false },
@@ -24,7 +24,7 @@ exports.default = {
         });
     },
     down: (queryInterface, DataTypes) => {
-        queryInterface.dropTable('Users');
+        return queryInterface.dropTable('Users');
     }
 };
 //# sourceMappingURL=20181021155300-user-create.js.map

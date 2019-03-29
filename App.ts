@@ -11,7 +11,7 @@ class App {
 
   constructor() {
     this.express = Express();
-    this.express.use(Express.json())
+    this.express.use(Express.json({ limit: '50mb' }));
     this.mountRoutes();
   }
 

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Svg's</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body,
+        html,
+        .wrapper {
+            height: 100%;
+            width: 100%;
+        }
+
+        .wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        svg {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <svg viewport="0 0 1920 1080">
+            <g>
+                <ellipse ry="8" rx="8" cx="100" cy="700" stroke-width="1.5" stroke="#bf0000" fill="#bf0000" />
+                <ellipse ry="8" rx="8" cx="400" cy="300" stroke-width="1.5" stroke="#bf0000" fill="#bf0000" />
+                <ellipse ry="8" rx="8" cx="450" cy="200" stroke-width="1.5" stroke="#bf0000" fill="#bf0000" />
+                <ellipse ry="8" rx="8" cx="500" cy="300" stroke-width="1.5" stroke="#bf0000" fill="#bf0000" />
+                <ellipse ry="8" rx="8" cx="800" cy="700" stroke-width="1.5" stroke="#bf0000" fill="#bf0000" />
+
+                <g class="control-points">
+                    <ellipse ry="8" rx="8" cx="300" cy="700" stroke-width="1.5" stroke="black" fill="black" />
+                    <ellipse ry="8" rx="8" cx="410" cy="250" stroke-width="1.5" stroke="black" fill="black" />
+                    <ellipse ry="8" rx="8" cx="490" cy="250" stroke-width="1.5" stroke="black" fill="black" />
+                    <ellipse ry="8" rx="8" cx="600" cy="700" stroke-width="1.5" stroke="black" fill="black" />
+
+                </g>
+            </g>
+            <path d="M 100 700 C 100 700 300 700 400 300" stroke="black" fill="transparent" />
+            <path d="M 400 300 C 400 300 410 250 450 200" stroke="black" fill="transparent" />
+            <path d="M 450 200 C 450 200 490 250 500 300" stroke="black" fill="transparent" />
+            <path d="M 500 300 C 500 300 600 700 800 700" stroke="black" fill="transparent" />
+            <g class="lines">
+                <path d="M 100 700 L 100 700 300 700" stroke="orange" fill="transparent" />
+                <path d="M 400 300 L 400 300 300 700" stroke="orange" fill="transparent" />
+            </g>
+
+            <g class="lines">
+                <path d="M 100 700 L 100 700 300 700" stroke="orange" fill="transparent" />
+                <path d="M 400 300 L 400 300 300 700" stroke="orange" fill="transparent" />
+            </g>
+
+            <g class="lines">
+                <path d="M 400 300 L 400 300 410 250" stroke="orange" fill="transparent" />
+                <path d="M 450 200 L 450 200 410 250" stroke="orange" fill="transparent" />
+            </g>
+
+            <g class="lines">
+                <path d="M 450 200 L 450 200 490 250" stroke="orange" fill="transparent" />
+                <path d="M 500 300 L 500 300 490 250" stroke="orange" fill="transparent" />
+            </g>
+
+
+            <g class="lines">
+                <path d="M 800 700 L 800 700 600 700" stroke="orange" fill="transparent" />
+                <path d="M 500 300 L 500 300 600 700" stroke="orange" fill="transparent" />
+            </g>
+
+            <g class="letters">
+                <text x="70" y="700" fill="#4a4a4a">A</text>
+                <text x="370" y="300" fill="#4a4a4a">B</text>
+                <text x="420" y="200" fill="#4a4a4a">C</text>
+                <text x="530" y="300" fill="#4a4a4a">D</text>
+                <text x="830" y="700" fill="#4a4a4a">E</text>
+
+                <text x="270" y="700" fill="#4a4a4a">C1</text>
+                <text x="380" y="250" fill="#4a4a4a">C2</text>
+                <text x="460" y="250" fill="#4a4a4a">C3</text>
+                <text x="570" y="700" fill="#4a4a4a">C4</text>
+
+            </g>
+        </svg>
+    </div>
+
+</body>
+
+</html>

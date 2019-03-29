@@ -4,7 +4,7 @@ const Sequelize = require("sequelize");
 exports.default = {
     up: (queryInterface, DataTypes) => {
         // comment
-        queryInterface.createTable('UIControls', {
+        return queryInterface.createTable('UIControls', {
             id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
             name: { type: DataTypes.STRING, allowNull: false, },
             type: { type: DataTypes.STRING, allowNull: false, },
@@ -21,7 +21,7 @@ exports.default = {
         });
     },
     down: (queryInterface, DataTypes) => {
-        queryInterface.dropTable('UIControls');
+        return queryInterface.dropTable('UIControls');
     }
 };
 //# sourceMappingURL=20190224182640-ui-control-create.js.map

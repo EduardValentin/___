@@ -13,10 +13,10 @@ const index_1 = require("../models/index");
 class TemplateService {
     constructor() {
         this.find = (clause) => __awaiter(this, void 0, void 0, function* () {
-            return index_1.default.Entity.find(clause);
+            return index_1.default.Template.find(clause);
         });
         this.insert = (attributes) => __awaiter(this, void 0, void 0, function* () {
-            return index_1.default.Template.insertOrUpdate(attributes);
+            return index_1.default.Template.create(attributes);
         });
         this.all = () => __awaiter(this, void 0, void 0, function* () {
             return index_1.default.Template.all();

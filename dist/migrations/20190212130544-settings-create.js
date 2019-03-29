@@ -4,7 +4,7 @@ const Sequelize = require("sequelize");
 exports.default = {
     up: (queryInterface, DataTypes) => {
         // comment
-        queryInterface.createTable('Settings', {
+        return queryInterface.createTable('Settings', {
             id: { type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true },
             setting_name: { type: Sequelize.STRING, allowNull: false, },
             setting_value: { type: Sequelize.STRING, allowNull: false, },
@@ -13,7 +13,7 @@ exports.default = {
         });
     },
     down: (queryInterface, DataTypes) => {
-        queryInterface.dropTable('Settings');
+        return queryInterface.dropTable('Settings');
     }
 };
 //# sourceMappingURL=20190212130544-settings-create.js.map

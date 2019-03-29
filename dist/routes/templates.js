@@ -8,11 +8,11 @@ const storage = multer.diskStorage({
         cb(null, Date.now() + file.originalname);
     },
 });
-const upload = multer({ storage });
+const upload = multer({ storage, limits: { fileSize: 50 * 1024 * 1024, }, });
 const Controller = new templates_controller_1.default();
 const router = express_1.Router();
 router.get('/', Controller.index);
-router.post('/create', upload.single('template'), Controller.createTemplate);
+router.post('/create', upload.single('file'), Controller.createTemplate);
 router.delete('/delete/:id', Controller.delete);
 exports.default = router;
 //# sourceMappingURL=templates.js.map

@@ -2,7 +2,7 @@ import * as Sequelize from 'sequelize';
 
 export default {
   up: (queryInterface: Sequelize.QueryInterface, DataTypes: Sequelize.DataTypes) => {
-    queryInterface.createTable('UserRoles',{
+    return queryInterface.createTable('UserRoles', {
       user_id: { type: DataTypes.INTEGER, primaryKey: true, },
       role_id: { type: DataTypes.INTEGER, primaryKey: true, },
       createdAt: { type: Sequelize.DATE, allowNull: false },
@@ -11,6 +11,6 @@ export default {
   },
 
   down: (queryInterface: Sequelize.QueryInterface, DataTypes: Sequelize.Sequelize) => {
-    queryInterface.dropTable('UserRoles');
+    return queryInterface.dropTable('UserRoles');
   }
 }
