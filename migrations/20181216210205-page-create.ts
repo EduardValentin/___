@@ -1,8 +1,10 @@
 import * as Sequelize from 'sequelize';
+import Database from '../models/index';
+import { appendTablePrefix } from '../utils/utils';
 
 export default {
   up: (queryInterface: Sequelize.QueryInterface, DataTypes: Sequelize.DataTypes) => {
-    queryInterface.createTable('Pages',{
+    return queryInterface.createTable('Pages', {
       id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true, },
       label: { type: DataTypes.STRING, allowNull: false },
       link: { type: DataTypes.STRING, allowNull: false, unique: true },
@@ -11,7 +13,17 @@ export default {
     });
   },
 
-  down: (queryInterface: Sequelize.QueryInterface, DataTypes: Sequelize.Sequelize) => {
-    queryInterface.dropTable('Pages');
+  down: async (queryInterface: Sequelize.QueryInterface, DataTypes: Sequelize.Sequelize) => {
+    const entities = await Database.Entity.findAll();
+    const promises = [];
+    entities.forEach(entity => {
+      console.log(entity.toJSON());
+
+      promises.push(queryInterface.dropTable(appendTablePrefix(entity.name)));
+    });
+
+    await Promise.all(promises);
+
+    return queryInterface.dropTable('Pages');
   }
 }

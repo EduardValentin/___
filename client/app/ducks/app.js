@@ -48,7 +48,7 @@ export const templateFetched = createAction('app/TEMPLATE_FETCHED');
 
 export const fetchDefaultTemplate = () => dispatch => {
   dispatch(templateFetching());
-  return Settings.getTemplate()
+  return Settings.getSetting('Template')
     .then((response) => {
       dispatch(templateFetched(response.body.data));
     })

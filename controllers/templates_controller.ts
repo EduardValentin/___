@@ -25,7 +25,6 @@ export default class TemplatesController {
         this.Service.insert({
           name: body.name,
           description: body.description,
-          entity_id: body.entity_id,
         })
         res.status(204).send();
       });

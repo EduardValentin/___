@@ -15,6 +15,7 @@ interface EditEntityField {
 
 interface EntityRequestBody {
   name: string,
+  template: number,
   fields?: EntityField[],
 }
 

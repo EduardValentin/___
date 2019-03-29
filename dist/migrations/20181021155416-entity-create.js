@@ -9,8 +9,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const Sequelize = require("sequelize");
-const index_1 = require("../models/index");
-const utils_1 = require("../utils/utils");
 exports.default = {
     up: (queryInterface, DataTypes) => {
         return queryInterface.createTable('Entities', {
@@ -22,6 +20,7 @@ exports.default = {
                     model: 'Templates',
                     key: 'id'
                 },
+                unique: true,
                 allowNull: true
             },
             createdAt: { type: Sequelize.DATE, allowNull: false },
@@ -29,13 +28,7 @@ exports.default = {
         });
     },
     down: (queryInterface, DataTypes) => __awaiter(this, void 0, void 0, function* () {
-        const entities = yield index_1.default.Entity.findAll();
-        const promises = [];
-        entities.forEach(entity => {
-            promises.push(queryInterface.dropTable(utils_1.appendTablePrefix(entity.name)));
-        });
-        yield Promise.all(promises);
-        queryInterface.dropTable('Entities');
+        return queryInterface.dropTable('Entities');
     })
 };
 //# sourceMappingURL=20181021155416-entity-create.js.map

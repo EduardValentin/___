@@ -4,6 +4,8 @@ import SettingsRouter from './routes/settings';
 import EntitiesRouter from './routes/entities';
 import GenericRouter from './routes/generic';
 import TemplatesRouter from './routes/templates';
+import PagesRouter from './routes/pages';
+
 import * as Path from 'path'
 
 class App {
@@ -29,6 +31,7 @@ class App {
     this.express.use('/api/v1/entities', EntitiesRouter);
     this.express.use('/api/v1/generic_entities', GenericRouter);
     this.express.use('/api/v1/templates', TemplatesRouter);
+    this.express.use('/api/v1/pages', PagesRouter);
   }
 
 }

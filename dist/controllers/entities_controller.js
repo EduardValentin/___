@@ -11,7 +11,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const index_1 = require("../models/index");
 const ramda_1 = require("ramda");
 const utils_1 = require("../utils/utils");
-const DatabasePool_1 = require("../DatabasePool");
 exports.column_definitions = {
     checkmark_input: 'BOOLEAN NOT NULL',
     text_input: 'TEXT NOT NULL',
@@ -53,10 +52,10 @@ class EntitiesController {
         ${utils_1.removeCommaFromQuery(tableDefinition)} 
       );
     `;
-                yield this.pool.query(queryText);
                 // create table
                 const entity = yield index_1.default.Entity.create({
                     name: reqBody.name,
+                    template_id: reqBody.template,
                 });
                 // For every field we add a record in UIControl table with foreign key to entity record
                 const fields = reqBody.fields.map((field) => ({
@@ -65,6 +64,7 @@ class EntitiesController {
                     entity_id: entity.id,
                 }));
                 yield index_1.default.UIControl.bulkCreate(fields);
+                yield index_1.default.sequelize.query(queryText);
                 // Fetch the saved entity including UIControls 
                 const response = yield index_1.default.Entity.find({
                     where: {
@@ -141,7 +141,7 @@ class EntitiesController {
                 })(reqBody.fields);
                 console.log(actions);
                 actions.forEach(action => {
-                    promises.push(this.pool.query(action));
+                    promises.push(index_1.default.sequelize.query(action));
                 });
                 yield Promise.all(promises);
                 const response = yield index_1.default.Entity.find({
@@ -179,7 +179,7 @@ class EntitiesController {
                     }
                 });
                 // Delete the user table
-                yield this.pool.query(`DROP TABLE ${process.env.USER_TABLE_PREFIX}${entity.name}`);
+                yield index_1.default.sequelize.query(`DROP TABLE ${process.env.USER_TABLE_PREFIX}${entity.name}`);
                 res.status(204).send({});
             }
             catch (error) {
@@ -218,7 +218,6 @@ class EntitiesController {
                 res.status(500).send({ error: error.message });
             }
         });
-        this.pool = DatabasePool_1.default.getInstance().getPool();
     }
 }
 exports.default = EntitiesController;

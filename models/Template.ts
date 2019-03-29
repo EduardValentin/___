@@ -3,7 +3,6 @@ import { SequelizeAttributes } from '../types';
 
 export interface TemplateAttributes {
   id?: number;
-  entity_id?: number,
   name: string;
   description: string;
 }
@@ -18,6 +17,11 @@ export default (sequelize: Sequelize.Sequelize) => {
   };
   const Template = sequelize.define<TemplateInstance, TemplateAttributes>("Template", attributes);
 
+  Template.associate = (models) => {
+    Template.hasOne(models.Entity, {
+      foreignKey: 'template_id',
+    });
+  }
   return Template;
 };
 

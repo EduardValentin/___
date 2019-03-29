@@ -6,6 +6,8 @@ import { SettingsAttributes, SettingsInstance } from "../../models/Settings";
 import { EntityAttributes, EntityInstance } from "../../models/Entity";
 import { UIControlAttributes, UIControlInstance } from "../../models/UIControl";
 import { TemplateInstance, TemplateAttributes } from "../../models/Template";
+import { PageInstance, PageAttributes } from "../../models/Page";
+import { EntityPageInstance, EntityPageAttributes } from "../../models/EntityPage";
 
 export interface DatabasebInterface {
   sequelize: Sequelize.Sequelize;
@@ -16,4 +18,7 @@ export interface DatabasebInterface {
   Entity: Sequelize.Model<EntityInstance, EntityAttributes>;
   UIControl: Sequelize.Model<UIControlInstance, UIControlAttributes>;
   Template: Sequelize.Model<TemplateInstance, TemplateAttributes>;
+  Page: Sequelize.Model<PageInstance, PageAttributes>;
+  EntityPage: Sequelize.Model<EntityPageInstance, EntityPageAttributes>;
+
 }

@@ -8,14 +8,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const DatabasePool_1 = require("../DatabasePool");
 const index_1 = require("../models/index");
 class EntityService {
     constructor() {
         this.find = (clause) => __awaiter(this, void 0, void 0, function* () {
             return index_1.default.Entity.find(clause);
         });
-        this.pool = DatabasePool_1.default.getInstance().getPool();
     }
 }
 exports.default = EntityService;

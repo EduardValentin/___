@@ -8,6 +8,11 @@ exports.default = (sequelize) => {
         description: { type: Sequelize.STRING, allowNull: true, },
     };
     const Template = sequelize.define("Template", attributes);
+    Template.associate = (models) => {
+        Template.hasOne(models.Entity, {
+            foreignKey: 'template_id',
+        });
+    };
     return Template;
 };
 //# sourceMappingURL=Template.js.map
