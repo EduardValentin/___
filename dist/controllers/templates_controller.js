@@ -30,7 +30,6 @@ class TemplatesController {
                     const templateCreated = yield this.Service.insert({
                         name: body.name,
                         description: body.description,
-                        entity_id: body.entity_id,
                     });
                     res.status(200).send({ data: templateCreated.toJSON() });
                 }));

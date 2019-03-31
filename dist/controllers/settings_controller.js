@@ -9,25 +9,30 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const index_1 = require("../models/index");
-exports.getSettings = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
-    let settings = yield index_1.default.Settings.all();
-    res.status(200).send({
-        data: settings,
-    });
-});
-exports.getTemplate = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
-    let setting = yield index_1.default.Settings.findOne({
-        where: {
-            setting_name: 'Template',
-        }
-    });
-    if (setting) {
-        res.status(200).send({
-            data: setting,
+class SettingsController {
+    constructor() {
+        this.getSettings = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+            let settings = yield index_1.default.Settings.all();
+            res.status(200).send({
+                data: settings,
+            });
+        });
+        this.getSetting = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
+            let setting = yield index_1.default.Settings.findOne({
+                where: {
+                    setting_name: req.params.setting_name,
+                }
+            });
+            if (setting) {
+                res.status(200).send({
+                    data: setting,
+                });
+            }
+            else {
+                res.status(404).send();
+            }
         });
     }
-    else {
-        res.status(404).send();
-    }
-});
+}
+exports.default = SettingsController;
 //# sourceMappingURL=settings_controller.js.map

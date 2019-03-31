@@ -89,7 +89,7 @@ class TemplateIndex extends Component {
 
 
           return (
-            <div key={template.id} className="template row p-3 mb-2 shadow">
+            <div key={template.id} className="template row p-3 mb-2 shadow-sm">
               <div className="thumb col d-flex align-items-center mr-4">
                 <img src={placeholder} alt="" />
               </div>

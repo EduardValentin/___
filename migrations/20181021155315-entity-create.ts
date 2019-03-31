@@ -1,6 +1,5 @@
 import * as Sequelize from 'sequelize';
-import Database from '../models/index';
-import { appendTablePrefix } from '../utils/utils';
+
 
 export default {
   up: (queryInterface: Sequelize.QueryInterface, DataTypes: Sequelize.DataTypes) => {
@@ -13,6 +12,7 @@ export default {
           model: 'Templates',
           key: 'id'
         },
+        unique: true,
         allowNull: true
       },
       createdAt: { type: Sequelize.DATE, allowNull: false },
@@ -21,15 +21,7 @@ export default {
   },
 
   down: async (queryInterface: Sequelize.QueryInterface, DataTypes: Sequelize.Sequelize) => {
-    const entities = await Database.Entity.findAll();
-    const promises = [];
-    entities.forEach(entity => {
-      promises.push(queryInterface.dropTable(appendTablePrefix(entity.name)));
-    });
-
-    await Promise.all(promises);
-
-    queryInterface.dropTable('Entities');
+    return queryInterface.dropTable('Entities');
 
   }
 }

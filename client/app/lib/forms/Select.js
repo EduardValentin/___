@@ -50,9 +50,14 @@ export default class Select extends Component {
       styles = {},
       options,
       DropdownIndicator,
+      meta: {
+        touched,
+        error
+      }
     } = this.props;
 
     const SelectComp = creatable ? Creatable : ReactSelect;
+    console.log(input);
 
     return (
       <div className={classnames(groupClass, 'form-group')}>
@@ -66,6 +71,7 @@ export default class Select extends Component {
         <SelectComp
           {...this.props}
           {...input}
+          onBlur={() => input.onBlur ? input.onBlur(input.value) : null}
           value={parseValue(input.value || value, options, getOptionValue)}
           isMulti={isMulti}
           placeholder={placeholder}
@@ -77,9 +83,11 @@ export default class Select extends Component {
           }}
           styles={{
             ...styles,
-          }
-          }
+          }}
         />
+
+        {touched && error && <span className="error text-danger">{error}</span>}
+
       </div>
     );
   }
@@ -95,4 +103,5 @@ Select.defaultProps = {
       </components.DropdownIndicator>
     );
   },
+  meta: {},
 };

@@ -3,8 +3,10 @@ import classNames from 'classnames';
 
 const Input = (props) => {
   const {
-    touched,
-    error,
+    meta: {
+      touched,
+      error,
+    },
     input,
     label,
     type,
@@ -20,9 +22,13 @@ const Input = (props) => {
         </label>
       )}
       <input defaultValue={defaultValue} {...input} id={input.name} type={type} className="form-control" />
-      {touched && error && <span className="error">{error}</span>}
+      {touched && error && <span className="error text-danger">{error}</span>}
     </div>
   );
 };
+
+Input.defaultProps = {
+  meta: {},
+}
 
 export default Input;

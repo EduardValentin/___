@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Sequelize = require("sequelize");
+;
 exports.default = (sequelize) => {
     const attributes = {
         id: { type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true },
@@ -9,14 +10,11 @@ exports.default = (sequelize) => {
     };
     const Page = sequelize.define('Page', attributes);
     Page.associate = (models) => {
-        Page.belongsTo(models.User, {
-            foreignKey: 'user_id',
-            targetKey: 'id',
-        });
-        Page.belongsToMany(models.Article, {
-            through: 'PagesTemplates',
+        Page.belongsToMany(models.Entity, {
+            through: models.EntityPage,
             foreignKey: 'page_id',
-            otherKey: 'template_id'
+            otherKey: 'entity_id',
+            onDelete: 'CASCADE',
         });
     };
     return Page;

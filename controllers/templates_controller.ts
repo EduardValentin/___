@@ -28,7 +28,6 @@ export default class TemplatesController {
         const templateCreated = await this.Service.insert({
           name: body.name,
           description: body.description,
-          entity_id: body.entity_id,
         })
         res.status(200).send({ data: templateCreated.toJSON() });
       });

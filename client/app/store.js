@@ -15,6 +15,7 @@ import { reducer as form } from 'redux-form';
 import app from 'ducks/app';
 import entities from 'ducks/entities';
 import templates from 'ducks/templates';
+import pages from 'ducks/pages';
 
 
 const initialState = Immutable({
@@ -54,6 +55,7 @@ const reducer = combineReducers(Object.assign({}, {
   app,
   entities,
   templates,
+  pages,
   form,
 }));
 

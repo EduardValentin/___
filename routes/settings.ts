@@ -1,7 +1,10 @@
 import { Router } from 'express';
-import { getTemplate } from '../controllers/settings_controller';
+import SettingsController from '../controllers/settings_controller';
+
+const Controller = new SettingsController();
 
 const router = Router();
-router.get('/template', getTemplate);
+
+router.get('/setting/:setting_name', Controller.getSetting);
 
 export default router;

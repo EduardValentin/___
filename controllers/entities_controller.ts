@@ -2,8 +2,6 @@ import { Response, Request, NextFunction } from 'express';
 import Database from '../models/index';
 import { reduce, map, trim } from 'ramda';
 import { removeCommaFromQuery } from '../utils/utils';
-import DatabasePool from '../DatabasePool';
-import { Pool } from 'pg';
 
 export const column_definitions: Record<UIControlType, string> = {
   checkmark_input: 'BOOLEAN NOT NULL',
@@ -18,9 +16,7 @@ export const default_values: Record<UIControlType, string> = {
 }
 
 export default class EntitiesController {
-  private pool: Pool;
   constructor() {
-    this.pool = DatabasePool.getInstance().getPool();
   }
 
   public createEntity = async (req: Request, res: Response, next: NextFunction) => {
@@ -59,11 +55,11 @@ export default class EntitiesController {
       );
     `;
 
-      await this.pool.query(queryText);
 
       // create table
       const entity = await Database.Entity.create({
         name: reqBody.name,
+        template_id: reqBody.template,
       });
 
       // For every field we add a record in UIControl table with foreign key to entity record
@@ -74,6 +70,8 @@ export default class EntitiesController {
       }));
 
       await Database.UIControl.bulkCreate(fields);
+
+      await Database.sequelize.query(queryText);
 
       // Fetch the saved entity including UIControls 
       const response = await Database.Entity.find({
@@ -164,7 +162,7 @@ export default class EntitiesController {
       console.log(actions);
 
       actions.forEach(action => {
-        promises.push(this.pool.query(action));
+        promises.push(Database.sequelize.query(action));
       });
 
       await Promise.all(promises);
@@ -212,7 +210,7 @@ export default class EntitiesController {
       });
 
       // Delete the user table
-      await this.pool.query(`DROP TABLE ${process.env.USER_TABLE_PREFIX}${entity.name}`);
+      await Database.sequelize.query(`DROP TABLE ${process.env.USER_TABLE_PREFIX}${entity.name}`);
       res.status(204).send({});
     } catch (error) {
       res.status(500).send({ error: error.message });

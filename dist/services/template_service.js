@@ -8,7 +8,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const DatabasePool_1 = require("../DatabasePool");
 const index_1 = require("../models/index");
 class TemplateService {
     constructor() {
@@ -28,7 +27,6 @@ class TemplateService {
                 }
             });
         });
-        this.pool = DatabasePool_1.default.getInstance().getPool();
     }
 }
 exports.default = TemplateService;

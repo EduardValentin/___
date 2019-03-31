@@ -92,7 +92,7 @@ class ShowEntityData extends Component {
         </div>
         {entity.records.length === 0 && NoData}
         {entity.records.length !== 0 && (
-          <div className="container mt-4 table stripes">
+          <div className="container-fluid mt-4 table stripes">
 
             {/* Render header */}
 

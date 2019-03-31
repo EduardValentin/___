@@ -11,7 +11,7 @@ export default {
     });
   },
 
-  down: (queryInterface: Sequelize.QueryInterface, DataTypes: Sequelize.Sequelize) => {
+  down: async (queryInterface: Sequelize.QueryInterface, DataTypes: Sequelize.Sequelize) => {
     return queryInterface.dropTable('Pages');
   }
 }
