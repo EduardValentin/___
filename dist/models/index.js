@@ -23,6 +23,8 @@ let db = {
     UIControl: null,
     Template: null,
     Page: null,
+    MediaFile: null,
+    MediaGroup: null,
     EntityPage: null,
 };
 fs

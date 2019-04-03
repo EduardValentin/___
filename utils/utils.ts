@@ -13,9 +13,9 @@ export const verifyEntityOrFields = (name: string) => {
   }
 }
 
-/** 
- * Trims white spaces from both margins of the string including the last comma at the end of the string 
- * @param string 
+/**
+ * Trims white spaces from both margins of the string including the last comma at the end of the string
+ * @param string
  */
 export const removeCommaFromQuery = (string: string) => {
   return compose(
@@ -27,5 +27,14 @@ export const removeCommaFromQuery = (string: string) => {
 export const appendTablePrefix = (table_name) => {
   return process.env.USER_TABLE_PREFIX + table_name;
 };
+
+/**
+ * Takes a number in megabytes and returns the equivalent ammount in bytes in base 2 or decimal
+ * @param megabytes {number} the number of megabytes to be converted to bytes
+ */
+export const megaToBytes = (megabytes: number, decimal?: boolean) => {
+  if (decimal) { return megabytes * 1000000 }
+  return megabytes * 1024 * 1024;
+}
 
 const entity_fields_test = new RegExp(/^[a-zA-Z0-9_]+$/);

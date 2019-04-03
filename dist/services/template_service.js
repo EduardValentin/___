@@ -9,8 +9,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const index_1 = require("../models/index");
-class TemplateService {
+const base_service_1 = require("./base_service");
+class TemplateService extends base_service_1.default {
     constructor() {
+        super(...arguments);
         this.find = (clause) => __awaiter(this, void 0, void 0, function* () {
             return index_1.default.Template.find(clause);
         });

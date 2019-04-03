@@ -1,17 +1,20 @@
-/*
-  This file, dramatically titled _shame.scss, consists of all the CSS declarations, hacks and things we are not proud of.
-  It would be imported after any other file, at the very end of the stylesheet.
-
-  Leave here any classes that are a temporary fix or those for is enough time to refactor,
-  with a comment to let others know why you did that.
-*/
-
 .overflow-hidden {
   overflow: hidden;
 }
 
+.icon-big {
+  font-size: 1.5rem;
+}
+
+.icon-medium{
+  font-size: 1.2rem;
+}
+
+
+
 .icon {
   i {
-    font-size: 1.2rem;
+    @extend .icon-medium;
+    cursor: pointer;
   }
 }

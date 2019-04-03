@@ -28,6 +28,8 @@ let db: DatabasebInterface = {
 	UIControl: null,
 	Template: null,
 	Page: null,
+	MediaFile: null,
+	MediaGroup: null,
 	EntityPage: null,
 };
 

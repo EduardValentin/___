@@ -6,9 +6,10 @@ export default {
       id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true, },
       name: { type: DataTypes.STRING, allowNull: false },
       type: { type: DataTypes.STRING, allowNull: true },
-      media_group_id: {
+      group_id: {
         type: DataTypes.INTEGER,
-        allowNull: true,
+        allowNull: false,
+        onDelete: 'CASCADE',
         references: {
           model: 'MediaGroups',
           key: 'id',

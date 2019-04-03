@@ -9,6 +9,7 @@ import SettingsContainer from './settings/SettingsContainer';
 import SidebarContainer from './sidebar/SidebarContainer';
 import TemplatesContainer from './templates/TemplatesContainer';
 import PagesContainer from './pages/PagesContainer';
+import MediaFilesContainer from './media/MediaFilesContainer';
 
 class AdminContent extends Component {
   constructor(props) {
@@ -56,9 +57,9 @@ class AdminContent extends Component {
       path: '/admin/pages',
     },
     {
-      name: 'Articles',
-      icon: <i className="icon ion-android-create" />,
-      path: '/admin/articles',
+      name: 'Media',
+      icon: <i className="icon ion-images" />,
+      path: '/admin/media',
     },
     {
       name: 'Entities',
@@ -88,6 +89,7 @@ class AdminContent extends Component {
             <Route path="/admin/entities" component={EntitiesContainer} />
             <Route path="/admin/templates" component={TemplatesContainer} />
             <Route path="/admin/pages" component={PagesContainer} />
+            <Route exact path="/admin/media" component={MediaFilesContainer} />
             <Route exact path="/admin/settings" component={SettingsContainer} />
           </Switch>
         </div>

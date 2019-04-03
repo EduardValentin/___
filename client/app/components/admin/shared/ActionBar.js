@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 const ActionBar = memo(({ className, title = 'No title', buttons = [] }) => {
   return (
     <div
-      className={classnames('action-bar w-100 d-flex justify-content-between align-items-center', className)}
+      className={classnames('action-bar mb-3 w-100 d-flex justify-content-between align-items-center', className)}
     >
       <h3 className="text-black">{title}</h3>
       <div>

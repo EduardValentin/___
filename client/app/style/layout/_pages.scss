@@ -1,0 +1,11 @@
+.add-page-modal {
+  .content {
+    min-width: 33rem;
+  }
+}
+
+.pages-index {
+  .page-row {
+    @extend .border;
+  }
+}

@@ -1,22 +1,39 @@
 import { connect } from 'react-redux';
-import NewPage from './NewPage.js';
 import { reduxForm } from 'redux-form';
 import pathOr from 'ramda/es/pathOr';
-import { newPage } from 'ducks/pages.js';
+import { newPage, editPage } from 'ducks/pages.js';
+import NewPage from './NewPage.js';
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch, ownProps) {
   return {
     onSubmit: (values) => {
-      const { entity, link, label } = values;
-      const entityIds = entity.map(ent => ent.value);
-      dispatch(newPage({ entities: entityIds, link, label }));
+      const { closeModal = () => {}, edit } = ownProps;
+      const {
+        Entities,
+        link,
+        label,
+        id,
+      } = values;
+
+      console.log(values);
+
+      const ids = Entities.map(ent => ent.value);
+      if (!edit) {
+        dispatch(newPage({ entities: ids, link, label }));
+      } else {
+        dispatch(editPage(id, { entities: ids, link, label }));
+      }
+      closeModal();
     },
   };
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state, props) {
+  const { getInitialValues = () => ({}) } = props;
+
   return {
     entities: pathOr(null, ['entities'], state),
+    initialValues: getInitialValues(),
   };
 }
 

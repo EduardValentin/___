@@ -16,7 +16,7 @@ import app from 'ducks/app';
 import entities from 'ducks/entities';
 import templates from 'ducks/templates';
 import pages from 'ducks/pages';
-
+import media_groups from 'ducks/media_groups';
 
 const initialState = Immutable({
   app: {
@@ -56,6 +56,7 @@ const reducer = combineReducers(Object.assign({}, {
   entities,
   templates,
   pages,
+  media_groups,
   form,
 }));
 

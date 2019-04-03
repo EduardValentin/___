@@ -12,6 +12,9 @@ module.exports = merge(common, {
       './main.js',
     ],
   },
+  watchOptions: {
+    ignored: './app/templates',
+  },
   output: {
     path: `${__dirname}/dist`, // `dist` is the destination
     filename: '[name].[hash].js',

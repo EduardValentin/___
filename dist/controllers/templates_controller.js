@@ -16,7 +16,6 @@ class TemplatesController {
     constructor() {
         this.createTemplate = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
             const { body, file } = req;
-            console.log(file);
             try {
                 const dir = `${__dirname}/../../client/app/templates/${body.name}`;
                 fs.mkdirSync(dir);

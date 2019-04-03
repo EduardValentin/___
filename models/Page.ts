@@ -8,7 +8,7 @@ export interface PageAttributes {
   label: string;
   link: string;
 
-  entities?: EntityAttributes[] | EntityAttributes['id'][],
+  Entities?: EntityAttributes[],
 }
 
 export interface PageInstance extends Sequelize.Instance<PageAttributes>, PageAttributes {
@@ -38,4 +38,3 @@ export default (sequelize: Sequelize.Sequelize) => {
 
   return Page;
 };
-

@@ -13,7 +13,6 @@ export default class TemplatesController {
 
   createTemplate = async (req: Request, res: Response, next: NextFunction) => {
     const { body, file } = req;
-    console.log(file);
     try {
       const dir = `${__dirname}/../../client/app/templates/${body.name}`;
       fs.mkdirSync(dir);

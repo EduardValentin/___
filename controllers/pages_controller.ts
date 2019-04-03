@@ -30,7 +30,7 @@ export default class PagesController {
   public delete = async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     try {
-      await this.PagesService.remove(id);
+      await this.PagesService.destroy(id);
       res.status(204).send();
     } catch (error) {
       res.status(500).send({ message: error.message });
@@ -62,8 +62,8 @@ export default class PagesController {
   public edit = async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     try {
-      await this.PagesService.edit(id, req.body);
-      res.status(204).send();
+      const page = await this.PagesService.edit(id, req.body);
+      res.status(200).send({ data: page });
     } catch (error) {
       res.status(500).send({ message: error.message });
     }

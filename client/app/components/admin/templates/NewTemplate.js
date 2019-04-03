@@ -1,11 +1,17 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { Component } from 'react';
 import LoadingSpinner from 'lib/components/LoadingSpinner';
 import Dropzone from 'react-dropzone';
-import Select from 'lib/forms/Select';
 import debounce from 'lodash.debounce';
 import { haltEvent } from 'utils';
 
 class NewTemplate extends Component {
+  handleInputTyping = debounce((e) => {
+    this.setState({
+      [e.target.name]: e.target.value,
+    });
+  }, 500);
+
   constructor(props) {
     super(props);
     this.state = {
@@ -13,15 +19,9 @@ class NewTemplate extends Component {
     };
   }
 
-  onDrop = (acceptedFiles, rejectedFiles) => {
+  onDrop = (acceptedFiles) => {
     this.setState({ template: acceptedFiles[0] });
   }
-
-  handleInputTyping = debounce((e) => {
-    this.setState({
-      [e.target.name]: e.target.value,
-    })
-  }, 500);
 
   handleSelect = option => {
     this.setState({ entity_id: option.value });
@@ -35,18 +35,9 @@ class NewTemplate extends Component {
 
     const { template } = this.state;
 
-    const entitiesOptions = entities.data.map(entity => {
-      return {
-        label: entity.name,
-        value: entity.id,
-      };
-    });
-
     if (entities.loading) {
       return <LoadingSpinner />;
     }
-
-    console.log(this.state);
 
     return (
       <div className="new-template">
@@ -86,12 +77,13 @@ class NewTemplate extends Component {
               onChange={e => this.handleInputTyping(e.nativeEvent)}
             />
           </div>
-          <Select
-            onChange={this.handleSelect}
-            label="Entity"
-            options={entitiesOptions.asMutable()}
-          />
-          <button onClick={haltEvent(() => addNewTemplate(this.state))} className="btn w-100 btn-sm btn-primary">Add</button>
+          <button
+            type="button"
+            onClick={(e) => haltEvent(() => addNewTemplate(this.state), e)}
+            className="btn w-100 btn-sm btn-primary"
+          >
+            Add
+          </button>
         </div>
       </div>
     );

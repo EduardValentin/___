@@ -5,6 +5,7 @@ import EntitiesRouter from './routes/entities';
 import GenericRouter from './routes/generic';
 import TemplatesRouter from './routes/templates';
 import PagesRouter from './routes/pages';
+import MediaRouter from './routes/media';
 
 import * as Path from 'path'
 
@@ -13,7 +14,7 @@ class App {
 
   constructor() {
     this.express = Express();
-    this.express.use(Express.json({ limit: '50mb' }));
+    this.express.use(Express.json({ limit: '500mb' }));
     this.mountRoutes();
   }
 
@@ -32,6 +33,7 @@ class App {
     this.express.use('/api/v1/generic_entities', GenericRouter);
     this.express.use('/api/v1/templates', TemplatesRouter);
     this.express.use('/api/v1/pages', PagesRouter);
+    this.express.use('/api/v1/media', MediaRouter);
   }
 
 }

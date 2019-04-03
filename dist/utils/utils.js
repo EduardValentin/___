@@ -21,5 +21,15 @@ exports.removeCommaFromQuery = (string) => {
 exports.appendTablePrefix = (table_name) => {
     return process.env.USER_TABLE_PREFIX + table_name;
 };
+/**
+ * Takes a number in megabytes and returns the equivalent ammount in bytes in base 2 or decimal
+ * @param megabytes {number} the number of megabytes to be converted to bytes
+ */
+exports.megaToBytes = (megabytes, decimal) => {
+    if (decimal) {
+        return megabytes * 1000000;
+    }
+    return megabytes * 1024 * 1024;
+};
 const entity_fields_test = new RegExp(/^[a-zA-Z0-9_]+$/);
 //# sourceMappingURL=utils.js.map

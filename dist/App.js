@@ -7,11 +7,12 @@ const entities_1 = require("./routes/entities");
 const generic_1 = require("./routes/generic");
 const templates_1 = require("./routes/templates");
 const pages_1 = require("./routes/pages");
+const media_1 = require("./routes/media");
 const Path = require("path");
 class App {
     constructor() {
         this.express = Express();
-        this.express.use(Express.json({ limit: '50mb' }));
+        this.express.use(Express.json({ limit: '500mb' }));
         this.mountRoutes();
     }
     mountRoutes() {
@@ -28,6 +29,7 @@ class App {
         this.express.use('/api/v1/generic_entities', generic_1.default);
         this.express.use('/api/v1/templates', templates_1.default);
         this.express.use('/api/v1/pages', pages_1.default);
+        this.express.use('/api/v1/media', media_1.default);
     }
 }
 exports.default = new App().express;

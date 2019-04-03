@@ -45,12 +45,11 @@ export const getAllTemplates = () => (dispatch) => {
 export const addTemplate = (params) => (dispatch, getState) => {
   dispatch(setLoading(true));
   return Templates.addTemplate(params).then(response => {
-    const templates = getState().templates.data;
-
+    const { templates } = getState();
     dispatch(setLoading(false));
     dispatch(setRecord({
       type: 'data',
-      value: templates.concat([response.body.data]),
+      value: templates.data.concat(response.body.data),
     }));
   }).catch(error => {
     dispatch(setLoading(false));
@@ -61,8 +60,8 @@ export const addTemplate = (params) => (dispatch, getState) => {
 
 export const deleteTemplate = (id) => (dispatch, getState) => {
   dispatch(setLoading(true));
-  return Templates.deleteTemplate(id).then(response => {
-    const templates = getState().templates;
+  return Templates.deleteTemplate(id).then(() => {
+    const { templates } = getState();
     dispatch(setLoading(false));
     dispatch(setRecord({
       type: 'data',

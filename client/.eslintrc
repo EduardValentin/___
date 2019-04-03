@@ -55,6 +55,7 @@
     "no-param-reassign": 0,
     "react/no-array-index-key": 0,
     "jsx-a11y/click-events-have-key-events": 0,
-    "no-return-assign": 0
+    "no-return-assign": 0,
+    "react/jsx-one-expression-per-line": 0
   }
 }

@@ -22,11 +22,16 @@ class PagesService extends base_service_1.default {
             if (entities.length !== 0) {
                 yield page.addEntity(entities);
             }
-            console.log(entities);
             return page;
         });
         /** Removes the page from the db */
-        this.remove = (id) => __awaiter(this, void 0, void 0, function* () {
+        this.destroy = (id) => __awaiter(this, void 0, void 0, function* () {
+            // Remove the association
+            yield index_1.default.EntityPage.destroy({
+                where: {
+                    page_id: id,
+                }
+            });
             return index_1.default.Page.destroy({ where: { id } });
         });
         /** Unassociates an entity from a page */
@@ -41,14 +46,38 @@ class PagesService extends base_service_1.default {
         });
         /** Edits the information about a page */
         this.edit = (page_id, params) => __awaiter(this, void 0, void 0, function* () {
-            return index_1.default.Page.update({
-                link: params.link,
-                label: params.label,
-            }, {
+            const page = yield index_1.default.Page.find({
                 where: {
-                    id: page_id,
-                }
+                    id: page_id
+                },
+                include: [{
+                        model: index_1.default.Entity,
+                        attributes: ['id'],
+                    }],
             });
+            page.link = params.link;
+            page.label = params.label;
+            if (params.entities) {
+                const entitiesToAdd = [];
+                const entitiesToRemove = [];
+                page.Entities.forEach(entity => {
+                    if (!params.entities.find((reqEntityId) => reqEntityId === entity.id)) {
+                        // In request entity we didn't find the current entity associated with the page so we add it to remove list
+                        entitiesToRemove.push(entity.id);
+                    }
+                });
+                // Now we check if we have new entities
+                params.entities.forEach((reqEntityId) => {
+                    if (!page.Entities.find(entity => entity.id === reqEntityId)) {
+                        // We didn't find the current page entity in the request so we add that to add list
+                        entitiesToAdd.push(reqEntityId);
+                    }
+                });
+                page.removeEntities(entitiesToRemove);
+                page.addEntity(entitiesToAdd);
+            }
+            page.save();
+            return page;
         });
         this.all = (options) => __awaiter(this, void 0, void 0, function* () {
             return index_1.default.Page.all(options);

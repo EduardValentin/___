@@ -1,15 +1,13 @@
 import React, { Component } from 'react'
 import Input from 'lib/forms/Input';
-import { haltEvent } from 'utils';
 import { Field } from 'redux-form';
 import LoadingSpinner from 'lib/components/LoadingSpinner';
 import Select from 'lib/forms/Select';
 
-const noSpacesValidator = value => value && /\s/.test(value) ? 'The link cannot contain any spaces' : undefined;
-const required = value => value ? undefined : 'Required';
+const noSpacesValidator = value => (value && /\s/.test(value) ? 'The link cannot contain any spaces' : undefined);
+const required = value => (value ? undefined : 'Required');
 
 export default class NewPage extends Component {
-
   constructor(props) {
     super(props);
     this.state = {};
@@ -21,11 +19,11 @@ export default class NewPage extends Component {
       entities,
       pristine,
       submitting,
-      reset
+      reset,
     } = this.props;
 
     if (entities.loading) {
-      return <LoadingSpinner />
+      return <LoadingSpinner />;
     }
 
     const entitiesOptions = entities.data.map(entity => {
@@ -34,10 +32,14 @@ export default class NewPage extends Component {
         value: entity.id,
       };
     });
-
     return (
       <div className="new-page">
         <form onSubmit={handleSubmit}>
+          <Field
+            name="id"
+            type="hidden"
+            component={Input}
+          />
 
           <Field
             component={Input}
@@ -56,7 +58,7 @@ export default class NewPage extends Component {
           />
 
           <Field
-            name="entity"
+            name="Entities"
             label="Entity"
             validate={required}
             options={entitiesOptions.asMutable()}
@@ -70,6 +72,6 @@ export default class NewPage extends Component {
           </div>
         </form>
       </div>
-    )
+    );
   }
 }

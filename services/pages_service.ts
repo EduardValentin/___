@@ -2,6 +2,7 @@ import BaseService from "./base_service";
 import Database from '../models/index';
 import sequelize = require("sequelize");
 import { PageAttributes } from "../models/Page";
+import { EntityAttributes } from "../models/Entity";
 
 export default class PagesService extends BaseService {
   constructor() {
@@ -18,13 +19,18 @@ export default class PagesService extends BaseService {
     if (entities.length !== 0) {
       await page.addEntity(entities);
     }
-    console.log(entities);
-
     return page;
   }
 
   /** Removes the page from the db */
-  public remove = async (id: number) => {
+  public destroy = async (id: number) => {
+    // Remove the association
+    await Database.EntityPage.destroy({
+      where: {
+        page_id: id,
+      }
+    });
+
     return Database.Page.destroy({ where: { id } });
   }
 
@@ -42,14 +48,44 @@ export default class PagesService extends BaseService {
 
   /** Edits the information about a page */
   public edit = async (page_id: number, params) => {
-    return Database.Page.update({
-      link: params.link,
-      label: params.label,
-    }, {
-        where: {
-          id: page_id,
+    const page = await Database.Page.find({
+      where: {
+        id: page_id
+      },
+      include: [{
+        model: Database.Entity,
+        attributes: ['id'],
+      }],
+    });
+
+    page.link = params.link;
+    page.label = params.label;
+    if (params.entities) {
+
+      const entitiesToAdd: number[] = [];
+      const entitiesToRemove: number[] = [];
+
+      page.Entities.forEach(entity => {
+        if (!params.entities.find((reqEntityId: number) => reqEntityId === entity.id)) {
+          // In request entity we didn't find the current entity associated with the page so we add it to remove list
+          entitiesToRemove.push(entity.id);
         }
       });
+
+      // Now we check if we have new entities
+
+      params.entities.forEach((reqEntityId) => {
+        if (!page.Entities.find(entity => entity.id === reqEntityId)) {
+          // We didn't find the current page entity in the request so we add that to add list
+          entitiesToAdd.push(reqEntityId);
+        }
+      });
+
+      page.removeEntities(entitiesToRemove);
+      page.addEntity(<any> entitiesToAdd);
+    }
+    page.save();
+    return page;
   }
 
   public all = async (options?: sequelize.FindOptions<PageAttributes>) => {

@@ -8,6 +8,8 @@ import { UIControlAttributes, UIControlInstance } from "../../models/UIControl";
 import { TemplateInstance, TemplateAttributes } from "../../models/Template";
 import { PageInstance, PageAttributes } from "../../models/Page";
 import { EntityPageInstance, EntityPageAttributes } from "../../models/EntityPage";
+import { MediaFileInstance, MediaFileAttributes } from "../../models/MediaFile";
+import { MediaGroupInstance, MediaGroupAttributes } from "../../models/MediaGroup";
 
 export interface DatabasebInterface {
   sequelize: Sequelize.Sequelize;
@@ -20,5 +22,6 @@ export interface DatabasebInterface {
   Template: Sequelize.Model<TemplateInstance, TemplateAttributes>;
   Page: Sequelize.Model<PageInstance, PageAttributes>;
   EntityPage: Sequelize.Model<EntityPageInstance, EntityPageAttributes>;
-
+  MediaFile: Sequelize.Model<MediaFileInstance, MediaFileAttributes>;
+  MediaGroup: Sequelize.Model<MediaGroupInstance, MediaGroupAttributes>;
 }

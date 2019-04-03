@@ -1,1 +1,9 @@
 node_modules
+
+client/app/templates
+
+client/node_modules
+
+dist
+
+uploads/media

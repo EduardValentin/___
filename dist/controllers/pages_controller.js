@@ -28,7 +28,7 @@ class PagesController {
         this.delete = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
             const { id } = req.params;
             try {
-                yield this.PagesService.remove(id);
+                yield this.PagesService.destroy(id);
                 res.status(204).send();
             }
             catch (error) {
@@ -60,8 +60,8 @@ class PagesController {
         this.edit = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
             const { id } = req.params;
             try {
-                yield this.PagesService.edit(id, req.body);
-                res.status(204).send();
+                const page = yield this.PagesService.edit(id, req.body);
+                res.status(200).send({ data: page });
             }
             catch (error) {
                 res.status(500).send({ message: error.message });

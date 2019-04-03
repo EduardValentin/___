@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import TemplatesController from '../controllers/templates_controller';
 import * as multer from 'multer';
+import { megaToBytes } from '../utils/utils';
 
 const storage = multer.diskStorage({
   filename: (req, file, cb) => {
@@ -8,7 +9,7 @@ const storage = multer.diskStorage({
   },
 });
 
-const upload = multer({ storage, limits: { fileSize: 50 * 1024 * 1024, }, });
+const upload = multer({ storage, limits: { fileSize: megaToBytes(500) }, });
 const Controller = new TemplatesController();
 
 const router = Router();

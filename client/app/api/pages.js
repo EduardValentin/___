@@ -7,3 +7,11 @@ export function fetchAll() {
 export function create(params) {
   return request('POST', '/pages/create', params);
 }
+
+export function edit(id, params) {
+  return request('PUT', `/pages/${id}`, params);
+}
+
+export function destroy(id) {
+  return request('DELETE', `/pages/delete/${id}`, {});
+}
